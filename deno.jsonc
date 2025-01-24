@@ -1,0 +1,21 @@
+{
+  "fmt": {
+    "lineWidth": 150
+  },
+  "lint": {},
+  "tasks": {
+    "start": "deno run -A --unstable-temporal main.ts",
+    "dev": "deno run -A --unstable-temporal --watch main.ts",
+    "file": "deno run -A --unstable-temporal --watch ",
+    "ahk": "autoHotKey.exe './Code chính/zalo.ahk'",
+    "AutoHotKey": "autoHotKey.exe './Code chính/zalo.ahk'"
+  },
+  "imports": {
+    "@luca/cases": "jsr:@luca/cases@^1.0.0",
+    "@std/fs": "jsr:@std/fs@^1.0.6",
+    "@std/log": "jsr:@std/log@^0.224.11",
+    "@std/path": "jsr:@std/path@^1.0.8",
+    "@std/assert": "jsr:@std/assert@1",
+    "echarts": "npm:echarts@^5.5.1"
+  }
+}

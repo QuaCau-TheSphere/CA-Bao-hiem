@@ -1,0 +1,17 @@
+{
+   "hot": {
+      "BundleName": "bundle.js",
+      "DEV": true,
+      "Entry": [
+         "./Đồ thị.ts"
+      ],
+      "Minify": false,
+      "OutPath": ".",
+      "Port": 80,
+      "Serve": ".",
+      "Watch": [
+         ".",
+         "."
+      ]
+   }
+}

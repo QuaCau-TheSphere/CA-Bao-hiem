@@ -1,0 +1,47 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@std/assert@1": "1.0.10",
+    "jsr:@std/internal@^1.0.5": "1.0.5",
+    "npm:echarts@^5.5.1": "5.5.1"
+  },
+  "jsr": {
+    "@std/assert@1.0.10": {
+      "integrity": "59b5cbac5bd55459a19045d95cc7c2ff787b4f8527c0dd195078ff6f9481fbb3",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/internal@1.0.5": {
+      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
+    }
+  },
+  "npm": {
+    "echarts@5.5.1": {
+      "integrity": "sha512-Fce8upazaAXUVUVsjgV6mBnGuqgO+JNDlcgF79Dksy4+wgGpQB2lmYoO4TSweFg/mZITdpGHomw/cNBJZj1icA==",
+      "dependencies": [
+        "tslib",
+        "zrender"
+      ]
+    },
+    "tslib@2.3.0": {
+      "integrity": "sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg=="
+    },
+    "zrender@5.6.0": {
+      "integrity": "sha512-uzgraf4njmmHAbEUxMJ8Oxg+P3fT04O+9p7gY+wJRVxo8Ge+KmYv0WJev945EH4wFuc4OY2NLXz46FZrWS9xJg==",
+      "dependencies": [
+        "tslib"
+      ]
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@luca/cases@1",
+      "jsr:@std/assert@1",
+      "jsr:@std/fs@^1.0.6",
+      "jsr:@std/log@~0.224.11",
+      "jsr:@std/path@^1.0.8",
+      "npm:echarts@^5.5.1"
+    ]
+  }
+}
