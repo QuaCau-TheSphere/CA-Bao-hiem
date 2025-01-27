@@ -1,88 +1,92 @@
 import { assertEquals } from "@std/assert/equals";
-
-type ChuKỳPhí = "tháng" | "quý" | "nửa năm" | "năm";
-type NgàyĐóngPhí = Temporal.PlainDate;
-type DsKỳPhí = NgàyĐóngPhí[];
-type CácLầnĐổiChuKỳPhí = Array<[NgàyĐóngPhí, ChuKỳPhí]>;
-
-interface HợpĐồng {
-  tổngPhí: number;
-  ngàyĐóngPhíĐầuTiên: NgàyĐóngPhí;
-  ngàyĐóngPhíCuốiCùng: NgàyĐóngPhí;
-  cácLầnĐổiChuKỳPhí: CácLầnĐổiChuKỳPhí;
-}
-
-const danhMụcChuKỳPhíSeed = [
-  ["tháng", Temporal.Duration.from({ months: 1 })],
-  ["quý", Temporal.Duration.from({ months: 3 })],
-  ["nửa năm", Temporal.Duration.from({ months: 6 })],
-  ["năm", Temporal.Duration.from({ years: 1 })],
-] as const;
-const danhMụcChuKỳPhí = new Map([...danhMụcChuKỳPhíSeed]);
-
-function kiểmTraHợpĐồng(hợpĐồng: HợpĐồng) {
-  const { ngàyĐóngPhíĐầuTiên, ngàyĐóngPhíCuốiCùng } = hợpĐồng;
-
-  assertEquals(ngàyĐóngPhíĐầuTiên.day, ngàyĐóngPhíCuốiCùng.day);
-  assertEquals(ngàyĐóngPhíĐầuTiên.month, ngàyĐóngPhíCuốiCùng.month);
-}
-
-function tínhCácNgàyĐóngPhíTiếpTheo(dsKỳPhí: DsKỳPhí, chuKỳPhí: ChuKỳPhí) {
-  const chuKỳMặcĐịnh = danhMụcChuKỳPhí.get("năm")!;
-  const chuKỳ = danhMụcChuKỳPhí.get(chuKỳPhí) || chuKỳMặcĐịnh;
-  let dừngVòngLặp = true;
-  while (dừngVòngLặp) {
-    const NgàyĐóngPhíTrước = dsKỳPhí.at(-1)!;
-    const ngàyĐóngPhíTiếpTheo = NgàyĐóngPhíTrước.add(chuKỳ);
-    dsKỳPhí.push(ngàyĐóngPhíTiếpTheo);
-    dừngVòngLặp = Temporal.PlainDate.compare(ngàyĐóngPhíTiếpTheo, ngàyĐóngPhíCuốiCùng) < 0;
-    console.log(ngàyĐóngPhíTiếpTheo, dừngVòngLặp);
-  }
-  return dsKỳPhí;
-}
-
-function đổiChuKỳĐóngPhí(
-  thờiĐiểmĐổiChuKỳPhí: Temporal.PlainDate,
-  chuKỳPhíMới: ChuKỳPhí,
-  dsKỳPhíTrướcĐó: DsKỳPhí | undefined,
-) {
-  console.log("🚀 ~ dsKỳPhíTrướcĐó:", dsKỳPhíTrướcĐó);
-  for (const ii in dsKỳPhíTrướcĐó) {
-    console.log("🚀 ~ ii:", ii);
-    const i = parseInt(ii);
-    const newLocal = Temporal.PlainDate.compare(thờiĐiểmĐổiChuKỳPhí, dsKỳPhíTrướcĐó[i]) < 0;
-    if (newLocal) {
-      const dsKỳPhíTrướcNgàyĐổi = dsKỳPhíTrướcĐó.slice(undefined, i);
-      return tínhCácNgàyĐóngPhíTiếpTheo(dsKỳPhíTrướcNgàyĐổi, chuKỳPhíMới);
-    }
-  }
-  return dsKỳPhíTrướcĐó;
-}
+import { HợpĐồng, KỳPhí, lấyChuKỳ } from "./Kiểu.ts";
 
 const hợpĐồng = {
   tổngPhí: 3e6,
-  ngàyĐóngPhíĐầuTiên: new Temporal.PlainDate(2025, 1, 1),
-  ngàyĐóngPhíCuốiCùng: new Temporal.PlainDate(2027, 1, 1),
-  cácLầnĐổiChuKỳPhí: [
-    [new Temporal.PlainDate(2025, 1, 1), "năm"],
-    [new Temporal.PlainDate(2025, 9, 30), "quý"],
+  cácLầnThiếtLậpPhí: [
+    {
+      ngàyThiếtLập: new Temporal.PlainDate(2025, 1, 1),
+      chuKỳ: "năm",
+      sốTiềnMỗiKỳ: 1e5,
+    },
+    {
+      ngàyThiếtLập: new Temporal.PlainDate(2025, 9, 1),
+      chuKỳ: "quý",
+      sốTiềnMỗiKỳ: 2e5,
+    },
+    {
+      ngàyThiếtLập: new Temporal.PlainDate(2026, 9, 1),
+      chuKỳ: "nửa năm",
+      sốTiềnMỗiKỳ: 2.5e5,
+    },
   ],
 } satisfies HợpĐồng;
-const { ngàyĐóngPhíĐầuTiên, ngàyĐóngPhíCuốiCùng, cácLầnĐổiChuKỳPhí } = hợpĐồng;
 
-kiểmTraHợpĐồng(hợpĐồng);
+function newFunction({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
+  let i = 0;
+  for (const thiếtLậpPhí of cácLầnThiếtLậpPhí) {
+    const { ngàyThiếtLập, sốTiềnMỗiKỳ } = thiếtLậpPhí;
+    const kếHoạchĐóngPhí: KỳPhí[] = [];
+    const chuKỳ = lấyChuKỳ(thiếtLậpPhí);
+    if (i === 0) {
+      let ngàyĐóng = ngàyThiếtLập;
+      let tổngSốPhíHoànThành = sốTiềnMỗiKỳ;
+      while (tổngSốPhíHoànThành <= tổngPhí) {
+        kếHoạchĐóngPhí.push({
+          ngàyĐóng: ngàyĐóng,
+          phíĐóng: sốTiềnMỗiKỳ,
+          tổngSốPhíHoànThành: tổngSốPhíHoànThành,
+        });
 
-/** Danh sách lúc mới ký hợp đồng */
-// const dsKỳPhíBanĐầu = tínhCácNgàyĐóngPhíTiếpTheo([ngàyĐóngPhíĐầuTiên], "năm");
-// console.log(ngàyĐóngPhíĐầuTiên, dsKỳPhíBanĐầu);
-const cácDsKỳPhíĐãTính = [];
-for (const [ngàyĐổiChuKỳPhí, chuKỳPhí] of cácLầnĐổiChuKỳPhí) {
-  const dsKỳPhíTrướcĐó = cácDsKỳPhíĐãTính.at(-1);
-  console.log("🚀 ~ chuKỳPhí:", chuKỳPhí);
-  console.log("🚀 ~ dsKỳPhíTrướcĐó:", dsKỳPhíTrướcĐó);
-  const dsKỳPhíMới = đổiChuKỳĐóngPhí(ngàyĐổiChuKỳPhí, chuKỳPhí, dsKỳPhíTrướcĐó);
-  console.log(ngàyĐổiChuKỳPhí, dsKỳPhíMới);
-  cácDsKỳPhíĐãTính.push(dsKỳPhíMới);
+        ngàyĐóng = ngàyĐóng.add(chuKỳ);
+        tổngSốPhíHoànThành += sốTiềnMỗiKỳ;
+      }
+    } else {
+      const thiếtLậpPhíCũ = cácLầnThiếtLậpPhí[i - 1];
+      const kỳPhíTrướcNgàyThiếtLậpMới = thiếtLậpPhíCũ.kếHoạchĐóngPhí?.findLast(({ ngàyĐóng }) =>
+        Temporal.PlainDate.compare(ngàyĐóng, ngàyThiếtLập) < 0
+      )!;
+      const chuKỳCũ = lấyChuKỳ(thiếtLậpPhíCũ);
+      const ngàyÁpDụngThiếtLậpPhíMới = kỳPhíTrướcNgàyThiếtLậpMới.ngàyĐóng.add(chuKỳCũ);
+
+      let ngàyĐóng = ngàyÁpDụngThiếtLậpPhíMới;
+      let tổngSốPhíHoànThành = kỳPhíTrướcNgàyThiếtLậpMới.tổngSốPhíHoànThành + sốTiềnMỗiKỳ;
+      while (true) {
+        if (tổngSốPhíHoànThành <= tổngPhí) {
+          kếHoạchĐóngPhí.push({
+            ngàyĐóng: ngàyĐóng,
+            phíĐóng: sốTiềnMỗiKỳ,
+            tổngSốPhíHoànThành: tổngSốPhíHoànThành,
+          });
+
+          ngàyĐóng = ngàyĐóng.add(chuKỳ);
+          tổngSốPhíHoànThành += sốTiềnMỗiKỳ;
+        } else {
+          const tổngSốPhíHoànThànhkỳTrước = kếHoạchĐóngPhí.at(-1)?.tổngSốPhíHoànThành!;
+          const phíĐóng = tổngPhí - tổngSốPhíHoànThànhkỳTrước;
+          console.log(i, phíĐóng);
+          kếHoạchĐóngPhí.push({
+            ngàyĐóng: ngàyĐóng,
+            phíĐóng: phíĐóng,
+            tổngSốPhíHoànThành: tổngPhí,
+          });
+          break;
+        }
+      }
+    }
+    Object.assign(thiếtLậpPhí, { kếHoạchĐóngPhí: kếHoạchĐóngPhí });
+    i++;
+  }
 }
+newFunction(hợpĐồng);
+console.log(hợpĐồng);
 
-console.log("🚀 ~ cácDsKỳPhíĐãTính:", cácDsKỳPhíĐãTính);
+//@ts-ignore:
+const kếHoạchĐóngPhíCuốiCùng = hợpĐồng.cácLầnThiếtLậpPhí.at(-1)?.kếHoạchĐóngPhí;
+const kỳPhíCuối = kếHoạchĐóngPhíCuốiCùng?.at(-1);
+const kỳPhíÁpChót = kếHoạchĐóngPhíCuốiCùng?.at(-2);
+
+//@ts-ignore:
+assertEquals(kỳPhíCuối?.tổngSốPhíHoànThành, hợpĐồng.tổngPhí);
+//@ts-ignore:
+assertEquals(kỳPhíÁpChót.tổngSốPhíHoànThành + kỳPhíCuối.phíĐóng, hợpĐồng.tổngPhí);
