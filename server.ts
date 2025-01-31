@@ -1,11 +1,18 @@
 Deno.serve(async (req) => {
-  const body = JSON.parse(await req.text());
-  console.log("Body:", body);
-
-  return new Response(body, {
+  const body = await req.text();
+  if (body) {
+    const res = { b: 2 };
+    return new Response(JSON.stringify(res, null, 2), {
+      status: 200,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+      },
+    });
+  }
+  return new Response("OK", {
     status: 200,
     headers: {
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "application/text; charset=utf-8",
     },
   });
 });
