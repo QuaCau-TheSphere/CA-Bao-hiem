@@ -1,28 +1,11 @@
-import { assertEquals } from "@std/assert/equals";
 import { HợpĐồng, KỳPhí, lấyChuKỳ } from "./Kiểu.ts";
 
-const hợpĐồng = {
-  tổngPhí: 3e6,
-  cácLầnThiếtLậpPhí: [
-    {
-      ngàyThiếtLập: new Temporal.PlainDate(2025, 1, 1),
-      chuKỳ: "năm",
-      sốTiềnMỗiKỳ: 1e5,
-    },
-    {
-      ngàyThiếtLập: new Temporal.PlainDate(2025, 9, 1),
-      chuKỳ: "quý",
-      sốTiềnMỗiKỳ: 2e5,
-    },
-    {
-      ngàyThiếtLập: new Temporal.PlainDate(2026, 9, 1),
-      chuKỳ: "nửa năm",
-      sốTiềnMỗiKỳ: 2.5e5,
-    },
-  ],
-} satisfies HợpĐồng;
-
-function newFunction({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
+/**
+ * Với mỗi thiết lập phí được khai báo sẽ tính kế hoạch đóng phí.
+ *
+ * Ngày đóng phí đầu tiên của thiết lập phí kỳ này là ngày sử dụng hết số tiền đã đóng của kỳ phí trước đó. Nó là kỳ phí cuối cùng của thiết lập cũ
+ */
+export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
   let i = 0;
   for (const thiếtLậpPhí of cácLầnThiếtLậpPhí) {
     const { ngàyThiếtLập, sốTiềnMỗiKỳ } = thiếtLậpPhí;
@@ -52,7 +35,7 @@ function newFunction({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
       let ngàyĐóng = ngàyÁpDụngThiếtLậpPhíMới;
       let tổngSốPhíHoànThành = kỳPhíTrướcNgàyThiếtLậpMới.tổngSốPhíHoànThành + sốTiềnMỗiKỳ;
       while (true) {
-        if (tổngSốPhíHoànThành <= tổngPhí) {
+        if (tổngSốPhíHoànThành < tổngPhí) {
           kếHoạchĐóngPhí.push({
             ngàyĐóng: ngàyĐóng,
             phíĐóng: sốTiềnMỗiKỳ,
@@ -61,10 +44,16 @@ function newFunction({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
 
           ngàyĐóng = ngàyĐóng.add(chuKỳ);
           tổngSốPhíHoànThành += sốTiềnMỗiKỳ;
+        } else if (tổngSốPhíHoànThành === tổngPhí) {
+          kếHoạchĐóngPhí.push({
+            ngàyĐóng: ngàyĐóng,
+            phíĐóng: sốTiềnMỗiKỳ,
+            tổngSốPhíHoànThành: tổngSốPhíHoànThành,
+          });
+          break;
         } else {
-          const tổngSốPhíHoànThànhkỳTrước = kếHoạchĐóngPhí.at(-1)?.tổngSốPhíHoànThành!;
-          const phíĐóng = tổngPhí - tổngSốPhíHoànThànhkỳTrước;
-          console.log(i, phíĐóng);
+          const tổngSốPhíHoànThànhKỳTrước = kếHoạchĐóngPhí.at(-1)?.tổngSốPhíHoànThành!;
+          const phíĐóng = tổngPhí - tổngSốPhíHoànThànhKỳTrước;
           kếHoạchĐóngPhí.push({
             ngàyĐóng: ngàyĐóng,
             phíĐóng: phíĐóng,
@@ -78,15 +67,3 @@ function newFunction({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
     i++;
   }
 }
-newFunction(hợpĐồng);
-console.log(hợpĐồng);
-
-//@ts-ignore:
-const kếHoạchĐóngPhíCuốiCùng = hợpĐồng.cácLầnThiếtLậpPhí.at(-1)?.kếHoạchĐóngPhí;
-const kỳPhíCuối = kếHoạchĐóngPhíCuốiCùng?.at(-1);
-const kỳPhíÁpChót = kếHoạchĐóngPhíCuốiCùng?.at(-2);
-
-//@ts-ignore:
-assertEquals(kỳPhíCuối?.tổngSốPhíHoànThành, hợpĐồng.tổngPhí);
-//@ts-ignore:
-assertEquals(kỳPhíÁpChót.tổngSốPhíHoànThành + kỳPhíCuối.phíĐóng, hợpĐồng.tổngPhí);

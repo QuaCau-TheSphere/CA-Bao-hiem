@@ -12,10 +12,14 @@
   },
   "imports": {
     "@luca/cases": "jsr:@luca/cases@^1.0.0",
+    "@morinokami/deno-says": "jsr:@morinokami/deno-says@^0.2.0",
     "@std/fs": "jsr:@std/fs@^1.0.6",
     "@std/log": "jsr:@std/log@^0.224.11",
     "@std/path": "jsr:@std/path@^1.0.8",
     "@std/assert": "jsr:@std/assert@1",
-    "echarts": "npm:echarts@^5.5.1"
+    "@std/yaml": "jsr:@std/yaml@^1.0.5",
+    "@std/cli": "jsr:@std/cli@^1.0.8",
+    "echarts": "npm:echarts@^5.6.0",
+    "ooker777/fibery": "../../Utils/Fibery"
   }
 }

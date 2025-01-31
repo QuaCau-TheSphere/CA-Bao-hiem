@@ -1,12 +1,10 @@
 {
-  "yaml.schemas": {
+  "yaml.schemas": {},
+  "deno": {
+    "enable": true,
+    "lint": true,
+    "config": "./deno.jsonc"
   },
-  "deno.enable": true,
-  "deno.lint": true,
-  "editor.formatOnSave": true,
-  // "editor.formatOnSave": false,
-  "deno.config": "./deno.jsonc",
-  "editor.defaultFormatter": "denoland.vscode-deno",
   "[typescriptreact]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
@@ -22,6 +20,17 @@
   "[markdown]": {
     "editor.formatOnSave": false
   },
-  "editor.tabSize": 2,
-  "editor.tabCompletion": "on"
+  "workbench.colorTheme": "Default Light Modern",
+  "security.workspace.trust.enabled": false,
+  "security.workspace.trust.startupPrompt": "never",
+  "editor": {
+    "defaultFormatter": "denoland.vscode-deno",
+    "formatOnType": true,
+    "formatOnSave": true,
+    "fontSize": 18,
+    "minimap.enabled": false,
+    "detectIndentation": false,
+    "tabSize": 2,
+    "tabCompletion": "on"
+  }
 }
