@@ -3,15 +3,28 @@ import { tínhKếHoạchĐóngPhí } from "./Tính toán thu nhập/Định k�
 
 Deno.serve(async (req) => {
   const body = await req.text();
+  console.log("🚀 ~ body:", body);
   if (body) {
-    const hợpĐồng = JSON.parse(body) as HợpĐồngFiberyReq;
-    tínhKếHoạchĐóngPhí(hợpĐồng);
-    return new Response(JSON.stringify(hợpĐồng, null, 2), {
-      status: 200,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
-    });
+    try {
+      const hợpĐồng = JSON.parse(body) as HợpĐồngFiberyReq;
+      console.log("🚀 ~ hợpĐồng:", hợpĐồng);
+      tínhKếHoạchĐóngPhí(hợpĐồng);
+      console.log("🚀 ~ hợpĐồng:", hợpĐồng);
+      return new Response(JSON.stringify(hợpĐồng, null, 2), {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      return new Response(JSON.stringify(error), {
+        status: 200,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      });
+    }
   }
   return new Response("OK", {
     status: 200,

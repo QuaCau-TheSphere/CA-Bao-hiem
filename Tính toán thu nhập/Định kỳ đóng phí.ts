@@ -9,15 +9,15 @@ import { HợpĐồngFiberyReq } from "../Hàm hỗ trợ/Kiểu cho client và 
  */
 export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng | HợpĐồngFiberyReq) {
   for (const i of Object.keys(cácLầnThiếtLậpPhí).map(Number)) {
+    console.log(i);
     const thiếtLậpPhí = cácLầnThiếtLậpPhí[i];
-    console.log("🚀 ~ thiếtLậpPhí:", thiếtLậpPhí);
-    const { ngàyThiếtLập, sốTiềnMỗiKỳ } = thiếtLậpPhí;
     const kếHoạchĐóngPhí: KỳPhí[] = [];
+    const { ngàyThiếtLập, sốTiềnMỗiKỳ } = thiếtLậpPhí;
     const chuKỳ = lấyChuKỳ(thiếtLậpPhí);
     if (i === 0) {
-      console.log("🚀:", ngàyThiếtLập);
       let ngàyĐóng = Temporal.PlainDate.from(ngàyThiếtLập);
-      console.log("🚀 ~ ngàyThiếtLập trong for :", ngàyThiếtLập);
+      console.log("🚀 ~ ngàyĐóng:", ngàyĐóng);
+      console.log("🚀 ~ ngàyĐóng:", ngàyĐóng);
       let tổngSốPhíHoànThành = sốTiềnMỗiKỳ;
       while (tổngSốPhíHoànThành <= tổngPhí) {
         kếHoạchĐóngPhí.push({
@@ -39,6 +39,7 @@ export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPh
       const ngàyÁpDụngThiếtLậpPhíMới = ngàyĐóngGầnNhất.add(chuKỳCũ);
 
       let ngàyĐóng = ngàyÁpDụngThiếtLậpPhíMới;
+      console.log("🚀 ~ ngàyĐóng:", ngàyĐóng);
       let tổngSốPhíHoànThành = kỳPhíTrướcNgàyThiếtLậpMới.tổngSốPhíHoànThành + sốTiềnMỗiKỳ;
       while (true) {
         if (tổngSốPhíHoànThành < tổngPhí) {

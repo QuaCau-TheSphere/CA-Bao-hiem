@@ -16,8 +16,6 @@
       "runtimeArgs": [
         "run",
         "--unstable-temporal",
-        "--config",
-        "./deno.json",
         "--inspect-wait",
         "--allow-all"
       ],

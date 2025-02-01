@@ -1,9 +1,10 @@
 import { SốTiền } from "./Kiểu.ts";
 import { ChuKỳ } from "./Hàm và kiểu cho thời gian.ts";
 
-export interface Entity {
+export interface EntityFibery {
   "Các lần thiết lập phí": string;
   "Tổng phí": number;
+  "Số tiền mỗi kỳ": number;
   "Chu kỳ": { Name: string; Id: string };
   "Kỳ đóng phí": string;
 }

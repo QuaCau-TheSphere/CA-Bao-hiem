@@ -12,7 +12,7 @@ await esbuild.build({
   bundle: true,
   format: "esm",
   platform: "node",
-  // target: "node12",
+  target: "node15",
   treeShaking: true,
   // minify: true,
 });
