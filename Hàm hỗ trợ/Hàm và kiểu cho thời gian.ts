@@ -1,8 +1,8 @@
 import { VậtThểPhí } from "./Kiểu.ts";
 import { VậtThểPhíFibery } from "./Kiểu cho client và server.ts";
 
-export type NgàyĐóng = Temporal.PlainDate;
-export type NgàyThiếtLập = Temporal.PlainDate;
+export type NgàyĐóng = Temporal.PlainDate | string;
+export type NgàyThiếtLập = Temporal.PlainDate | string;
 export type ChuKỳ = "tháng" | "quý" | "nửa năm" | "năm";
 
 const seedDanhMụcChuKỳ = [

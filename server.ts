@@ -3,13 +3,10 @@ import { tínhKếHoạchĐóngPhí } from "./Tính toán thu nhập/Định k�
 
 Deno.serve(async (req) => {
   const body = await req.text();
-  console.log("🚀 ~ body:", body);
   if (body) {
     try {
       const hợpĐồng = JSON.parse(body) as HợpĐồngFiberyReq;
-      console.log("🚀 ~ hợpĐồng:", hợpĐồng);
       tínhKếHoạchĐóngPhí(hợpĐồng);
-      console.log("🚀 ~ hợpĐồng:", hợpĐồng);
       return new Response(JSON.stringify(hợpĐồng, null, 2), {
         status: 200,
         headers: {

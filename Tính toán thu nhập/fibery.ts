@@ -21,9 +21,9 @@ function tạoHợpĐồngTừEntity(entity: EntityFibery): HợpĐồngFiberyRe
     const split1 = dòng.split(":");
     const split2 = split1[1].split(",");
     return {
-      ngàyThiếtLập: split1[0],
-      chuKỳ: split2[0].toLocaleLowerCase() as ChuKỳ,
-      sốTiềnMỗiKỳ: parseInt(split2[1]),
+      ngàyThiếtLập: split1[0].trim(),
+      chuKỳ: split2[0].trim().toLocaleLowerCase() as ChuKỳ,
+      sốTiềnMỗiKỳ: Number(split2[1].trim()),
     };
   });
   const lầnThiếtLậpPhíLầnNày: VậtThểPhíFibery = {
