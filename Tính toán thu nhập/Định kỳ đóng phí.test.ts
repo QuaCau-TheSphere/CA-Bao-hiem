@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert/equals";
-import { HợpĐồng, KỳPhí } from "./Kiểu.ts";
+import { HợpĐồng, KỳPhí } from "../Hàm hỗ trợ/Kiểu.ts";
 import { tínhKếHoạchĐóngPhí } from "./Định kỳ đóng phí.ts";
 const hợpĐồng = {
   tổngPhí: 3e6,

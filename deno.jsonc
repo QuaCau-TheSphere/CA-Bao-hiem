@@ -21,5 +21,10 @@
     "@std/cli": "jsr:@std/cli@^1.0.8",
     "echarts": "npm:echarts@^5.6.0",
     "ooker777/fibery": "../../Utils/Fibery"
+  },
+  "deploy": {
+    "project": "Bảo hiểm",
+    "entrypoint": "./server.ts",
+    "org": "Quả Cầu"
   }
 }

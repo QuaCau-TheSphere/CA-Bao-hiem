@@ -6,15 +6,15 @@ const outfile = `./dist/Code chạy trên Fibery.js`;
 
 await esbuild.build({
   plugins: [...denoPlugins()],
-  entryPoints: ["./fibery.ts"],
+  entryPoints: ["./Tính toán thu nhập/fibery.ts"],
   outfile: outfile,
   charset: "utf8",
   bundle: true,
   format: "esm",
   platform: "node",
-  target: "node12",
+  // target: "node12",
   treeShaking: true,
-  minify: true,
+  // minify: true,
 });
 
 esbuild.stop();

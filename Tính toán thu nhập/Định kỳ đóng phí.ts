@@ -1,18 +1,23 @@
-import { HợpĐồng, KỳPhí, lấyChuKỳ } from "./Kiểu.ts";
+import { HợpĐồng, KỳPhí } from "../Hàm hỗ trợ/Kiểu.ts";
+import { lấyChuKỳ } from "../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
+import { HợpĐồngFiberyReq } from "../Hàm hỗ trợ/Kiểu cho client và server.ts";
 
 /**
  * Với mỗi thiết lập phí được khai báo sẽ tính kế hoạch đóng phí.
  *
  * Ngày đóng phí đầu tiên của thiết lập phí kỳ này là ngày sử dụng hết số tiền đã đóng của kỳ phí trước đó. Nó là kỳ phí cuối cùng của thiết lập cũ
  */
-export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng) {
-  let i = 0;
-  for (const thiếtLậpPhí of cácLầnThiếtLậpPhí) {
+export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPhí }: HợpĐồng | HợpĐồngFiberyReq) {
+  for (const i of Object.keys(cácLầnThiếtLậpPhí).map(Number)) {
+    const thiếtLậpPhí = cácLầnThiếtLậpPhí[i];
+    console.log("🚀 ~ thiếtLậpPhí:", thiếtLậpPhí);
     const { ngàyThiếtLập, sốTiềnMỗiKỳ } = thiếtLậpPhí;
     const kếHoạchĐóngPhí: KỳPhí[] = [];
     const chuKỳ = lấyChuKỳ(thiếtLậpPhí);
     if (i === 0) {
-      let ngàyĐóng = ngàyThiếtLập;
+      console.log("🚀:", ngàyThiếtLập);
+      let ngàyĐóng = Temporal.PlainDate.from(ngàyThiếtLập);
+      console.log("🚀 ~ ngàyThiếtLập trong for :", ngàyThiếtLập);
       let tổngSốPhíHoànThành = sốTiềnMỗiKỳ;
       while (tổngSốPhíHoànThành <= tổngPhí) {
         kếHoạchĐóngPhí.push({
@@ -30,7 +35,8 @@ export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPh
         Temporal.PlainDate.compare(ngàyĐóng, ngàyThiếtLập) < 0
       )!;
       const chuKỳCũ = lấyChuKỳ(thiếtLậpPhíCũ);
-      const ngàyÁpDụngThiếtLậpPhíMới = kỳPhíTrướcNgàyThiếtLậpMới.ngàyĐóng.add(chuKỳCũ);
+      const ngàyĐóngGầnNhất = Temporal.PlainDate.from(kỳPhíTrướcNgàyThiếtLậpMới.ngàyĐóng);
+      const ngàyÁpDụngThiếtLậpPhíMới = ngàyĐóngGầnNhất.add(chuKỳCũ);
 
       let ngàyĐóng = ngàyÁpDụngThiếtLậpPhíMới;
       let tổngSốPhíHoànThành = kỳPhíTrướcNgàyThiếtLậpMới.tổngSốPhíHoànThành + sốTiềnMỗiKỳ;
@@ -64,6 +70,5 @@ export function tínhKếHoạchĐóngPhí({ tổngPhí, cácLầnThiếtLậpPh
       }
     }
     Object.assign(thiếtLậpPhí, { kếHoạchĐóngPhí: kếHoạchĐóngPhí });
-    i++;
   }
 }
