@@ -1,3 +1,9 @@
+// Tính toán thu nhập/Xử lý vật thể phí.ts
+function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }) {
+  const thiếtLậpPhíCuốiCùng = cácVậtThểPhí.slice(-1)[0];
+  return thiếtLậpPhíCuốiCùng.kếHoạchĐóngPhí;
+}
+
 // Tính toán thu nhập/fibery.ts
 var fibery = context.getService("fibery");
 var http = context.getService("http");
@@ -13,9 +19,9 @@ function tạoHợpĐồngTừEntity(entity) {
     const split1 = dòng.split(":");
     const split2 = split1[1].split(",");
     return {
-      ngàyThiếtLập: split1[0],
-      chuKỳ: split2[0].toLocaleLowerCase(),
-      sốTiềnMỗiKỳ: parseInt(split2[1])
+      ngàyThiếtLập: split1[0].trim(),
+      chuKỳ: split2[0].trim().toLocaleLowerCase(),
+      sốTiềnMỗiKỳ: Number(split2[1].trim())
     };
   });
   const lầnThiếtLậpPhíLầnNày = {
@@ -32,12 +38,12 @@ async function tínhKếHoạchĐóngPhí(hợpĐồng) {
   const res = await http.postAsync("https://nhucau.deno.dev", { body: hợpĐồng });
   return JSON.parse(res);
 }
-var _a;
-for (const entity of args.currentEntities) {
-  let hợpĐồng = tạoHợpĐồngTừEntity(entity);
-  console.log("🚀 ~ hợpĐồng:", hợpĐồng);
-  hợpĐồng = await tínhKếHoạchĐóngPhí(hợpĐồng);
-  console.log("🚀 ~ hợpĐồng.cácLầnThiếtLậpPhí:", hợpĐồng.cácLầnThiếtLậpPhí);
-  const kếHoạchĐóngPhí = (_a = hợpĐồng.cácLầnThiếtLậpPhí.at(-1)) == null ? void 0 : _a.kếHoạchĐóngPhí;
-  console.log("🚀 ~ kếHoạchĐóngPhí:", kếHoạchĐóngPhí);
+async function main() {
+  for (const entity of args.currentEntities) {
+    const hợpĐồngThiếtLậpPhí = tạoHợpĐồngTừEntity(entity);
+    const hợpĐồngVậtThểPhí = await tínhKếHoạchĐóngPhí(hợpĐồngThiếtLậpPhí);
+    const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
+    console.log("🚀 ~ kếHoạchĐóngPhí:", kếHoạchĐóngPhí);
+  }
 }
+await main();

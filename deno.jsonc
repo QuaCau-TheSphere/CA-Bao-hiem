@@ -6,9 +6,9 @@
   "tasks": {
     "start": "deno run -A --unstable-temporal main.ts",
     "dev": "deno run -A --unstable-temporal --watch main.ts",
-    "file": "deno run -A --unstable-temporal --watch ",
-    "ahk": "autoHotKey.exe './Code chính/zalo.ahk'",
-    "AutoHotKey": "autoHotKey.exe './Code chính/zalo.ahk'"
+    "test": "deno test -A --unstable-temporal --watch",
+    "build": "deno run -A --unstable-temporal --watch ./build.ts",
+    "file": "deno run -A --unstable-temporal --watch "
   },
   "imports": {
     "@luca/cases": "jsr:@luca/cases@^1.0.0",

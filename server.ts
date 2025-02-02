@@ -1,13 +1,14 @@
-import { HợpĐồngFiberyReq } from "./Hàm hỗ trợ/Kiểu cho client và server.ts";
-import { tínhKếHoạchĐóngPhí } from "./Tính toán thu nhập/Định kỳ đóng phí.ts";
+import { HợpĐồngThiếtLậpPhí } from "./Hàm hỗ trợ/Kiểu.ts";
+import { tạoVậtThểPhí } from "./Tính toán thu nhập/Tạo vật thể phí.ts";
 
 Deno.serve(async (req) => {
   const body = await req.text();
   if (body) {
     try {
-      const hợpĐồng = JSON.parse(body) as HợpĐồngFiberyReq;
-      tínhKếHoạchĐóngPhí(hợpĐồng);
-      return new Response(JSON.stringify(hợpĐồng, null, 2), {
+      const hợpĐồngThiếtLậpPhí = JSON.parse(body) as HợpĐồngThiếtLậpPhí;
+      const hợpĐồngVậtThểPhí = tạoVậtThểPhí(hợpĐồngThiếtLậpPhí);
+      console.log(hợpĐồngVậtThểPhí);
+      return new Response(JSON.stringify(hợpĐồngVậtThểPhí, null, 2), {
         status: 200,
         headers: {
           "content-type": "application/json; charset=utf-8",

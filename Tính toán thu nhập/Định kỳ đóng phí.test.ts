@@ -1,7 +1,8 @@
-import { assertEquals, assertThrows } from "@std/assert";
-import { HợpĐồng, KỳPhí } from "../Hàm hỗ trợ/Kiểu.ts";
-import { tínhKếHoạchĐóngPhí } from "./Định kỳ đóng phí.ts";
-const dsHợpĐồng: HợpĐồng[] = [
+import { assertEquals } from "@std/assert";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí } from "../Hàm hỗ trợ/Kiểu.ts";
+import { tạoVậtThểPhí } from "./Tạo vật thể phí.ts";
+import { lấyKếHoạchĐóngPhíMới } from "./Xử lý vật thể phí.ts";
+const dsHợpĐồng: HợpĐồngThiếtLậpPhí[] = [
   {
     tổngPhí: 3e6,
     cácLầnThiếtLậpPhí: [
@@ -44,53 +45,21 @@ const dsHợpĐồng: HợpĐồng[] = [
   },
 ];
 
-const hợpĐồngLỗi = {
-  "tổngPhí": 30000000,
-  "cácLầnThiếtLậpPhí": [
-    {
-      "ngàyThiếtLập": "2025-02-01",
-      "chuKỳ": "quý",
-      "sốTiềnMỗiKỳ": 300000,
-    },
-    {
-      "ngàyThiếtLập": "2025-04-01",
-      "chuKỳ": "năm",
-      "sốTiềnMỗiKỳ": 300000,
-    },
-    {
-      "ngàyThiếtLập": "2025-04-02",
-      "chuKỳ": "quý",
-      "sốTiềnMỗiKỳ": 400000,
-    },
-  ],
-};
-
 for (const i in dsHợpĐồng) {
-  let hợpĐồng = dsHợpĐồng[i];
-  Deno.test(`Hợp đồng ${i}`, function () {
-    const { kỳPhíÁpChót, kỳPhíCuối } = kiểmTraKếtQuả(hợpĐồng);
-    assertEquals(kỳPhíÁpChót.tổngSốPhíHoànThành + kỳPhíCuối.phíĐóng, hợpĐồng.tổngPhí);
-    assertEquals(kỳPhíCuối?.tổngSốPhíHoànThành, hợpĐồng.tổngPhí);
+  if (i === "0") continue;
+  const hợpĐồngThiếtLậpPhí = dsHợpĐồng[i];
+  Deno.test(`Hợp đồng ${i}`, () => {
+    const hợpĐồngVậtThểPhí = tạoVậtThểPhí(hợpĐồngThiếtLậpPhí);
+    kiểmTraKếtQuả(hợpĐồngVậtThểPhí);
+    // console.log("🚀 ~ hợpĐồng:", hợpĐồng);
+    // console.log(lấyKếHoạchĐóngPhíMới(hợpĐồng));
   });
 }
-// Deno.test(`Hợp đồng lỗi`, function () {
-//   assertThrows(newFunction()); // Doesn't throw
-//   // assertThrows(tínhKếHoạchĐóngPhí(hợpĐồngLỗi));
-// });
 
-// function newFunction(): () => unknown {
-
-//   return () => { throw new TypeError("hello world!"); };
-// }
-
-// Deno.test("Ngày thiết lập phí lần sau phải sau lần trước", function () {
-//   newFunction(hợpĐồng2);
-// });
-
-function kiểmTraKếtQuả(hợpĐồng: HợpĐồng) {
-  tínhKếHoạchĐóngPhí(hợpĐồng);
-  const kếHoạchĐóngPhíCuốiCùng = hợpĐồng.cácLầnThiếtLậpPhí.at(-1)?.kếHoạchĐóngPhí as KỳPhí[];
+export function kiểmTraKếtQuả(hợpĐồng: HợpĐồngVậtThểPhí) {
+  const kếHoạchĐóngPhíCuốiCùng = hợpĐồng.cácVậtThểPhí.at(-1)?.kếHoạchĐóngPhí as KỳPhí[];
   const kỳPhíCuối = kếHoạchĐóngPhíCuốiCùng?.at(-1) as KỳPhí;
   const kỳPhíÁpChót = kếHoạchĐóngPhíCuốiCùng?.at(-2) as KỳPhí;
-  return { kỳPhíÁpChót, kỳPhíCuối };
+  assertEquals(kỳPhíÁpChót.tổngSốPhíHoànThành + kỳPhíCuối.phíĐóng, hợpĐồng.tổngPhí);
+  assertEquals(kỳPhíCuối?.tổngSốPhíHoànThành, hợpĐồng.tổngPhí);
 }
