@@ -7,14 +7,13 @@ function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }) {
 // Tính toán thu nhập/fibery.ts
 var fibery = context.getService("fibery");
 var http = context.getService("http");
-function tạoHợpĐồngTừEntity(entity) {
-  const {
-    "Các lần thiết lập phí": cácLầnThiếtLậpPhíEntity,
-    "Tổng phí": tổngPhí,
-    "Chu kỳ": { Name: chuKỳ, Id: idChuKỳ },
-    "Số tiền mỗi kỳ": sốTiềnMỗiKỳ
-  } = entity;
-  const dsCácDòng = cácLầnThiếtLậpPhíEntity.trim().split("\n");
+function tạoHợpĐồngThiếtLậpPhí({
+  "Các lần thiết lập phí": cácLầnThiếtLậpPhí,
+  "Tổng phí": tổngPhí,
+  "Chu kỳ": { Name: chuKỳ },
+  "Số tiền mỗi kỳ": sốTiềnMỗiKỳ
+}) {
+  const dsCácDòng = cácLầnThiếtLậpPhí.trim().split("\n");
   const cácLầnThiếtLậpPhíTrướcĐây = dsCácDòng.map((dòng) => {
     const split1 = dòng.split(":");
     const split2 = split1[1].split(",");
@@ -34,16 +33,39 @@ function tạoHợpĐồngTừEntity(entity) {
     cácLầnThiếtLậpPhí: cácLầnThiếtLậpPhíTrướcĐây.concat(lầnThiếtLậpPhíLầnNày)
   };
 }
-async function tínhKếHoạchĐóngPhí(hợpĐồng) {
+async function lấyHợpĐồngVậtThểPhí(hợpĐồng) {
   const res = await http.postAsync("https://nhucau.deno.dev", { body: hợpĐồng });
   return JSON.parse(res);
 }
-async function main() {
-  for (const entity of args.currentEntities) {
-    const hợpĐồngThiếtLậpPhí = tạoHợpĐồngTừEntity(entity);
-    const hợpĐồngVậtThểPhí = await tínhKếHoạchĐóngPhí(hợpĐồngThiếtLậpPhí);
-    const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
-    console.log("🚀 ~ kếHoạchĐóngPhí:", kếHoạchĐóngPhí);
-  }
+async function cậpNhậtCácLầnThiếtLậpPhí({
+  "Các lần thiết lập phí": cácLầnThiếtLậpPhí,
+  "Chu kỳ": { Name: chuKỳ },
+  "Số tiền mỗi kỳ": sốTiềnMỗiKỳ,
+  Type,
+  Id
+}) {
+  const hômNay = (/* @__PURE__ */ new Date()).toISOString().split("T")[0].trim();
+  const text = cácLầnThiếtLậpPhí.trim() + `
+${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
+  await fibery.updateEntity(Type, Id, { "Các lần thiết lập phí": text });
 }
-await main();
+async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí) {
+  const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
+  const entities = kếHoạchĐóngPhí.map(({ ngàyĐóng, ngàyĐóngKếTiếp, phíĐóng, tổngSốPhíHoànThành }) => {
+    return {
+      Name: "",
+      "Ngày đóng kế tiếp": String(ngàyĐóngKếTiếp),
+      "Ngày đóng": String(ngàyĐóng),
+      "Phí đóng": phíĐóng,
+      "Tổng số phí hoàn thành": tổngSốPhíHoànThành
+    };
+  });
+  const type = "Kỳ phí";
+  await fibery.createEntityBatch(type, entities);
+}
+for (const entity of args.currentEntities) {
+  const hợpĐồngThiếtLậpPhí = tạoHợpĐồngThiếtLậpPhí(entity);
+  const hợpĐồngVậtThểPhí = await lấyHợpĐồngVậtThểPhí(hợpĐồngThiếtLậpPhí);
+  await cậpNhậtCácLầnThiếtLậpPhí(entity);
+  await ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
+}
