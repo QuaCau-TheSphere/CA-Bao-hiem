@@ -6,7 +6,7 @@ import { ThiếtLậpPhí } from "../Hàm hỗ trợ/Kiểu.ts";
  * Tính các kỳ phí bắt đầu từ ngày mà thiết lập có hiệu lực cho tới ngày có ngày thiết lập mới
  */
 function tínhCáckỳPhíĐãĐóngCủaThiếtLậpCũ({ kếHoạchĐóngPhí }: VậtThểPhí, ngàyThiếtLập: NgàyThiếtLập) {
-  return kếHoạchĐóngPhí.filter(({ ngàyĐóng }) => soSánhNgày(ngàyĐóng, ngàyThiếtLập));
+  return kếHoạchĐóngPhí.filter(({ ngàyĐóng }) => soSánhNgày(ngàyĐóng, ngàyThiếtLập) < 0);
 }
 
 function tínhLịchSửVàKếHoạchĐóngPhí(

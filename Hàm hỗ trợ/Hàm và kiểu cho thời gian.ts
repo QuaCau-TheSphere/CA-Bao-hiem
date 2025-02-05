@@ -20,6 +20,12 @@ export function lấyChuKỳ({ chuKỳ }: ThiếtLậpPhí) {
   return danhMụcChuKỳ.get(chuKỳ) || chuKỳMặcĐịnh;
 }
 
+/**
+ * Kết quả khi:
+ * - ngày 1 trước ngày 2: -1
+ * - ngày 1 trùng ngày 2: 0
+ * - ngày 1 sau ngày 2: 1
+ */
 export function soSánhNgày(ngày1: NgàyĐóng, ngày2: NgàyThiếtLập) {
-  return Temporal.PlainDate.compare(ngày1, ngày2) < 0;
+  return Temporal.PlainDate.compare(ngày1, ngày2);
 }

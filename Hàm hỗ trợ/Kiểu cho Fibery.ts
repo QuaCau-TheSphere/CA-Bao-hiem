@@ -1,32 +1,34 @@
 // deno-lint-ignore-file no-explicit-any
-export interface TrườngFibery {
-  Name: string;
-  Id: string;
+export type Id = string;
+export interface TrườngFibery<T> {
+  Name: T;
+  Id: Id;
 }
 
 export interface DescriptionFibery {
   Secret: string;
-  Id: string;
+  Id: Id;
 }
 
 export interface EntityFibery {
   Name: string;
   Description?: DescriptionFibery;
-  Type?: string;
-  "Public Id"?: string;
-  Id?: string;
-  "Created By"?: TrườngFibery;
-  "Creation Date"?: string;
-  "Modification Date"?: string;
-  Rank?: number;
+  Type: string;
+  "Public Id": string;
+  Id: string;
+  "Created By": TrườngFibery<string>;
+  "Creation Date": string;
+  "Modification Date": string;
+  Rank: number;
 }
+export type EntityFiberyĐểTạo = Partial<EntityFibery>;
 
 export interface ArgsFibery {
   steps: [];
   currentEntities: EntityFibery[];
   currentUser: {
     "Public Id": string;
-    Id: string;
+    Id: Id;
     Email: string;
     "Active?": boolean;
     "Admin?": boolean;
@@ -42,15 +44,15 @@ export interface ContextFibery {
 
 export interface FiberyService {
   getEntityById: (type: string, id: string, fields: string[]) => any;
-  getEntitiesByIds: (type: string, ids: string[], fields: string[]) => any;
+  getEntitiesByIds: (type: string, ids: string[], fields: string[]) => { Id: string; [key: string]: string }[];
   createEntity: (type: string, values: object) => any;
   createEntityBatch: (type: string, entities: object[]) => any;
   updateEntity: (type: string, id: string, values: object) => any;
   updateEntityBatch: (type: string, entities: object[]) => any;
   addCollectionItem: (type: string, id: string, field: string, itemId: string) => any;
-  addCollectionItemBatch: (type: string, field: string, args: { id: string; itemId: string }[]) => any;
+  addCollectionItemBatch: (type: string, field: string, args: { id: Id; itemId: string }[]) => any;
   removeCollectionItem: (type: string, id: string, field: string, itemId: string) => any;
-  removeCollectionItemBatch: (type: string, field: string, args: { id: string; itemId: string }[]) => any;
+  removeCollectionItemBatch: (type: string, field: string, args: { id: Id; itemId: string }[]) => any;
   deleteEntity: (type: string, id: string) => any;
   deleteEntityBatch: (type: string, ids: string[]) => any;
   setState: (type: string, id: string, state: string) => any;

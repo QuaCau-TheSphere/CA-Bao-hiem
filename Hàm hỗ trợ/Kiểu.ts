@@ -31,11 +31,13 @@ export interface VậtThểPhí extends ThiếtLậpPhí {
 }
 
 export interface HợpĐồngThiếtLậpPhí {
+  tênHợpĐồng?: string;
   tổngPhí: SốTiền;
   cácLầnThiếtLậpPhí: ThiếtLậpPhí[];
 }
 
 export interface HợpĐồngVậtThểPhí {
+  tênHợpĐồng?: string;
   tổngPhí: SốTiền;
   cácVậtThểPhí: VậtThểPhí[];
 }

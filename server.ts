@@ -1,5 +1,9 @@
 import { HợpĐồngThiếtLậpPhí } from "./Hàm hỗ trợ/Kiểu.ts";
+import { lấyKếHoạchĐóngPhíMới, xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Xử lý vật thể phí.ts";
 import { tạoVậtThểPhí } from "./Tính toán thu nhập/Tạo vật thể phí.ts";
+import { ResBody } from "./Hàm hỗ trợ/Kiểu cho client và server.ts";
+
+/** Cái nào phải dùng Temporal để tính thì cho vào đây */
 
 Deno.serve(async (req) => {
   const body = await req.text();
@@ -8,7 +12,16 @@ Deno.serve(async (req) => {
       const hợpĐồngThiếtLậpPhí = JSON.parse(body) as HợpĐồngThiếtLậpPhí;
       const hợpĐồngVậtThểPhí = tạoVậtThểPhí(hợpĐồngThiếtLậpPhí);
       console.log(hợpĐồngVậtThểPhí);
-      return new Response(JSON.stringify(hợpĐồngVậtThểPhí, null, 2), {
+
+      const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
+      const cácKỳPhíBịBỏ = xácĐịnhCácKỳPhíBịBỏ(kếHoạchĐóngPhí);
+
+      const resBody: ResBody = {
+        hợpĐồngVậtThểPhí: hợpĐồngVậtThểPhí,
+        cácKỳPhíBịBỏ: cácKỳPhíBịBỏ,
+      };
+      console.log("🚀 ~ cácKỳPhíBịBỏ:", cácKỳPhíBịBỏ);
+      return new Response(JSON.stringify(resBody, null, 2), {
         status: 200,
         headers: {
           "content-type": "application/json; charset=utf-8",

@@ -1,5 +1,12 @@
-# dsf
+# Thay đổi định kỳ đóng phí
 
+## Cách sử dụng
+Các trường trong 
+- Ngày đóng kế tiếp:
+- Ngày đóng:
+- Phí đóng:
+- Tổng số phí hoàn thành:
+- People:
 ## Tính số tiền ngày cuối đóng phí
 
 Ngày đóng phí đầu tiên của thiết lập phí kỳ này là ngày sử dụng hết số tiền đã đóng của kỳ phí trước đó. Nó là kỳ phí cuối cùng của thiết lập cũ
