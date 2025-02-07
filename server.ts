@@ -1,7 +1,8 @@
-import { HợpĐồngThiếtLậpPhí } from "./Hàm hỗ trợ/Kiểu.ts";
-import { lấyKếHoạchĐóngPhíMới, xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Xử lý vật thể phí.ts";
+import { HợpĐồngThiếtLậpPhí } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu.ts";
+import { xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Xử lý vật thể phí.ts";
 import { tạoVậtThểPhí } from "./Tính toán thu nhập/Tạo vật thể phí.ts";
-import { ResBody } from "./Hàm hỗ trợ/Kiểu cho client và server.ts";
+import { ResBody } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu cho client và server.ts";
+import { lấyKếHoạchĐóngPhíMới } from "./Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts";
 
 /** Cái nào phải dùng Temporal để tính thì cho vào đây */
 

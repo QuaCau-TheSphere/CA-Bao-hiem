@@ -1,10 +1,11 @@
-// Tính toán thu nhập/Xử lý vật thể phí.ts
+// Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts
+var hômNay = (/* @__PURE__ */ new Date()).toISOString().split("T")[0].trim();
+var fibery = context.getService("fibery");
+var http = context.getService("http");
 function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }) {
   const vậtThểPhíCuốiCùng = cácVậtThểPhí.slice(-1)[0];
   return vậtThểPhíCuốiCùng.kếHoạchĐóngPhí;
 }
-
-// Tính toán thu nhập/fibery.ts
 function tạoHợpĐồngThiếtLậpPhí({
   "Các lần thiết lập phí": cácLầnThiếtLậpPhí,
   "Tổng phí": tổngPhí,
@@ -52,7 +53,9 @@ async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, { Type: databaseH�
     return;
   const idCácKỳPhíĐangCó = cácVậtThểTrườngKỳPhíĐangCó.map(({ Id }) => Id);
   const idVàNgàyĐóngCácKỳPhíĐangCó = await fibery.getEntitiesByIds("Kỳ phí", idCácKỳPhíĐangCó, ["Ngày đóng"]);
+  console.log("🚀 ~ idVàNgàyĐóngCácKỳPhíĐangCó:", idVàNgàyĐóngCácKỳPhíĐangCó);
   const cácNgàyĐóngPhíBịBỏ = cácKỳPhíBịBỏ.map(({ ngàyĐóng }) => ngàyĐóng);
+  console.log("🚀 ~ cácNgàyĐóngPhíBịBỏ:", cácNgàyĐóngPhíBịBỏ);
   const idCácKỳPhíBịBỏ = idVàNgàyĐóngCácKỳPhíĐangCó.flatMap(({ Id, "Ngày đóng": ngàyĐóng }) => cácNgàyĐóngPhíBịBỏ.includes(ngàyĐóng) ? [Id] : []);
   console.log("🚀 ~ idCácKỳPhíBịBỏ:", idCácKỳPhíBịBỏ);
   await fibery.deleteEntityBatch(databaseKỳPhí, idCácKỳPhíBịBỏ);
@@ -75,16 +78,17 @@ async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, { Name:
   });
   await fibery.addCollectionItemBatch(databaseHợpĐồng, "Kỳ phí", dsEntityKỳPhíDùngĐểThêm);
 }
-var fibery = context.getService("fibery");
-var http = context.getService("http");
-var databaseKỳPhí = "Kỳ phí";
-var hômNay = (/* @__PURE__ */ new Date()).toISOString().split("T")[0].trim();
+
+// Tính toán thu nhập/Client/fibery.ts
+var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
 for (const entityHợpĐồng of args.currentEntities) {
   const hợpĐồngThiếtLậpPhí = tạoHợpĐồngThiếtLậpPhí(entityHợpĐồng);
   const { hợpĐồngVậtThểPhí, cácKỳPhíBịBỏ } = await lấyKếtQuảTínhToán(hợpĐồngThiếtLậpPhí);
-  console.log("🚀 ~ hợpĐồngVậtThểPhí:", hợpĐồngVậtThểPhí);
-  console.log("🚀 ~ cácKỳPhíBịBỏ:", cácKỳPhíBịBỏ);
   await cậpNhậtCácLầnThiếtLậpPhí(entityHợpĐồng);
   await xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, entityHợpĐồng);
   await ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityHợpĐồng);
 }
+export {
+  databaseKỳPhí
+};
+// Tạo lúc 23:55:10 ngày 7/2/2025

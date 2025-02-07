@@ -1,12 +1,24 @@
 # Thay đổi định kỳ đóng phí
 
 ## Cách sử dụng
-Các trường trong 
-- Ngày đóng kế tiếp:
-- Ngày đóng:
-- Phí đóng:
-- Tổng số phí hoàn thành:
-- People:
+
+Các trường trong database "Hợp đồng":
+
+- Các lần thiết lập phí: text
+- Tổng phí: number
+- Số tiền mỗi kỳ: number
+- Chu kỳ: single select gồm "tháng", "quý", "nửa năm", "năm"
+- Kỳ phí: relation
+- People: user
+
+Các trường trong database "Kỳ phí":
+
+- Ngày đóng kế tiếp: date
+- Ngày đóng: date
+- Phí đóng: number
+- Tổng số phí hoàn thành: number
+- People: user
+
 ## Tính số tiền ngày cuối đóng phí
 
 Ngày đóng phí đầu tiên của thiết lập phí kỳ này là ngày sử dụng hết số tiền đã đóng của kỳ phí trước đó. Nó là kỳ phí cuối cùng của thiết lập cũ

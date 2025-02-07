@@ -1,6 +1,6 @@
-import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí, SốTiền, VậtThểPhí } from "../Hàm hỗ trợ/Kiểu.ts";
-import { lấyChuKỳ, NgàyThiếtLập, soSánhNgày } from "../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
-import { ThiếtLậpPhí } from "../Hàm hỗ trợ/Kiểu.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí, SốTiền, VậtThểPhí } from "./Hàm hỗ trợ/Kiểu.ts";
+import { lấyChuKỳ, NgàyThiếtLập, soSánhNgày } from "./Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
+import { ThiếtLậpPhí } from "./Hàm hỗ trợ/Kiểu.ts";
 
 /**
  * Tính các kỳ phí bắt đầu từ ngày mà thiết lập có hiệu lực cho tới ngày có ngày thiết lập mới

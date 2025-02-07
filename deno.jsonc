@@ -7,7 +7,7 @@
     "start": "deno run -A --unstable-temporal main.ts",
     "dev": "deno run -A --unstable-temporal --watch main.ts",
     "test": "deno test -A --unstable-temporal --watch",
-    "build": "deno run -A --unstable-temporal --watch ./build.ts",
+    "build": "deno run -A --unstable-temporal --watch './Tính toán thu nhập/Client/build.ts'",
     "file": "deno run -A --unstable-temporal --watch "
   },
   "imports": {

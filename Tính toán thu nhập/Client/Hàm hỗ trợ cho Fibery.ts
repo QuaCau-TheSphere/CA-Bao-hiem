@@ -3,21 +3,26 @@
 
 import { ChuKỳ } from "../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
 import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí, SốTiền, ThiếtLậpPhí } from "../Hàm hỗ trợ/Kiểu.ts";
+import { ResBody } from "../Hàm hỗ trợ/Kiểu cho client và server.ts";
 import {
   ArgsFibery,
   ContextFibery,
   EntityFibery,
-  EntityFiberyĐểTạo,
+  EntityFiberyToCreate,
   FiberyService,
   HttpService,
   Id,
   TrườngFibery,
 } from "../Hàm hỗ trợ/Kiểu cho Fibery.ts";
-import { lấyKếHoạchĐóngPhíMới } from "./Xử lý vật thể phí.ts";
-import { ResBody } from "../Hàm hỗ trợ/Kiểu cho client và server.ts";
+import { databaseKỳPhí } from "./fibery.ts";
 
-declare const context: ContextFibery, args: ArgsFibery;
-interface EntityHợpĐồng extends EntityFibery {
+export const hômNay = new Date().toISOString().split("T")[0].trim();
+export declare const context: ContextFibery;
+
+export const fibery = context.getService("fibery") as FiberyService;
+export const http = context.getService("http") as HttpService;
+
+export interface EntityHợpĐồng extends EntityFibery {
   "Các lần thiết lập phí": string;
   "Tổng phí": SốTiền;
   "Số tiền mỗi kỳ": SốTiền;
@@ -26,7 +31,6 @@ interface EntityHợpĐồng extends EntityFibery {
   "Kế hoạch đóng phí": string;
   People: TrườngFibery<string>;
 }
-
 interface EntityKỳPhí extends EntityFibery {
   "Ngày đóng": string;
   "Ngày đóng kế tiếp": string;
@@ -34,16 +38,18 @@ interface EntityKỳPhí extends EntityFibery {
   "Tổng số phí hoàn thành": SốTiền;
   People: TrườngFibery<string>;
 }
-
-interface EntityKỳPhíĐểTạo extends EntityFiberyĐểTạo {
+interface EntityKỳPhíĐểTạo extends EntityFiberyToCreate {
   "Ngày đóng": string;
   "Ngày đóng kế tiếp": string;
   "Phí đóng": SốTiền;
   "Tổng số phí hoàn thành": SốTiền;
   People: Id;
 }
-
-function tạoHợpĐồngThiếtLậpPhí({
+export function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }: HợpĐồngVậtThểPhí) {
+  const vậtThểPhíCuốiCùng = cácVậtThểPhí.slice(-1)[0];
+  return vậtThểPhíCuốiCùng.kếHoạchĐóngPhí;
+}
+export function tạoHợpĐồngThiếtLậpPhí({
   "Các lần thiết lập phí": cácLầnThiếtLậpPhí,
   "Tổng phí": tổngPhí,
   "Chu kỳ": { Name: chuKỳ },
@@ -69,13 +75,11 @@ function tạoHợpĐồngThiếtLậpPhí({
     cácLầnThiếtLậpPhí: cácLầnThiếtLậpPhíTrướcĐây.concat(lầnThiếtLậpPhíLầnNày),
   };
 }
-
-async function lấyKếtQuảTínhToán(hợpĐồng: HợpĐồngThiếtLậpPhí): Promise<ResBody> {
+export async function lấyKếtQuảTínhToán(hợpĐồng: HợpĐồngThiếtLậpPhí): Promise<ResBody> {
   const res = await http.postAsync("https://nhucau.deno.dev", { body: hợpĐồng });
   return JSON.parse(res);
 }
-
-async function cậpNhậtCácLầnThiếtLậpPhí({
+export async function cậpNhậtCácLầnThiếtLậpPhí({
   "Các lần thiết lập phí": cácLầnThiếtLậpPhí,
   "Chu kỳ": { Name: chuKỳ },
   "Số tiền mỗi kỳ": sốTiềnMỗiKỳ,
@@ -85,9 +89,8 @@ async function cậpNhậtCácLầnThiếtLậpPhí({
   const text = cácLầnThiếtLậpPhí.trim() + `\n${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
   await fibery.updateEntity(Type as string, Id as string, { "Các lần thiết lập phí": text });
 }
-
 /** Xoá các kỳ phí sau ngày thiết lập phí mới */
-async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ: KỳPhí[], { Type: databaseHợpĐồng, Id: idHợpĐồng }: EntityHợpĐồng) {
+export async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ: KỳPhí[], { Type: databaseHợpĐồng, Id: idHợpĐồng }: EntityHợpĐồng) {
   const cácVậtThểTrườngKỳPhíĐangCó = (await fibery.getEntityById(databaseHợpĐồng, idHợpĐồng, ["Kỳ phí"]))["Kỳ phí"] as TrườngFibery<string>[];
   if (cácVậtThểTrườngKỳPhíĐangCó.length === 0) return;
 
@@ -96,15 +99,16 @@ async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ: KỳPhí[], { Type
     Id: string;
     "Ngày đóng": string;
   }[];
+  console.log("🚀 ~ idVàNgàyĐóngCácKỳPhíĐangCó:", idVàNgàyĐóngCácKỳPhíĐangCó);
 
   /** cácNgàyĐóngPhíBịBỏ là các ngày sau ngày thiết lập phí */
   const cácNgàyĐóngPhíBịBỏ = cácKỳPhíBịBỏ.map(({ ngàyĐóng }) => ngàyĐóng);
+  console.log("🚀 ~ cácNgàyĐóngPhíBịBỏ:", cácNgàyĐóngPhíBịBỏ);
   const idCácKỳPhíBịBỏ = idVàNgàyĐóngCácKỳPhíĐangCó.flatMap(({ Id, "Ngày đóng": ngàyĐóng }) => cácNgàyĐóngPhíBịBỏ.includes(ngàyĐóng) ? [Id] : []);
   console.log("🚀 ~ idCácKỳPhíBịBỏ:", idCácKỳPhíBịBỏ);
   await fibery.deleteEntityBatch(databaseKỳPhí, idCácKỳPhíBịBỏ);
 }
-
-async function ghiKếHoạchĐóngPhíMới(
+export async function ghiKếHoạchĐóngPhíMới(
   hợpĐồngVậtThểPhí: HợpĐồngVậtThểPhí,
   { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, People: { Id: idChủHợpĐồng }, "Chu kỳ": { Name: chuKỳ } }: EntityHợpĐồng,
 ) {
@@ -125,19 +129,4 @@ async function ghiKếHoạchĐóngPhíMới(
     return { id: idEntityHợpĐồng, itemId: i.Id };
   });
   await fibery.addCollectionItemBatch(databaseHợpĐồng, "Kỳ phí", dsEntityKỳPhíDùngĐểThêm);
-}
-
-const fibery = context.getService("fibery") as FiberyService;
-const http = context.getService("http") as HttpService;
-
-const databaseKỳPhí = "Kỳ phí";
-const hômNay = new Date().toISOString().split("T")[0].trim();
-for (const entityHợpĐồng of args.currentEntities as EntityHợpĐồng[]) {
-  const hợpĐồngThiếtLậpPhí = tạoHợpĐồngThiếtLậpPhí(entityHợpĐồng);
-  const { hợpĐồngVậtThểPhí, cácKỳPhíBịBỏ } = await lấyKếtQuảTínhToán(hợpĐồngThiếtLậpPhí);
-  console.log("🚀 ~ hợpĐồngVậtThểPhí:", hợpĐồngVậtThểPhí);
-  console.log("🚀 ~ cácKỳPhíBịBỏ:", cácKỳPhíBịBỏ);
-  await cậpNhậtCácLầnThiếtLậpPhí(entityHợpĐồng);
-  await xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, entityHợpĐồng);
-  await ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityHợpĐồng);
 }

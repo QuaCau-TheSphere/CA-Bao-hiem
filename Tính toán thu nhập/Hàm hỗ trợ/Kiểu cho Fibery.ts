@@ -21,7 +21,7 @@ export interface EntityFibery {
   "Modification Date": string;
   Rank: number;
 }
-export type EntityFiberyĐểTạo = Partial<EntityFibery>;
+export type EntityFiberyToCreate = Partial<EntityFibery>;
 
 export interface ArgsFibery {
   steps: [];
