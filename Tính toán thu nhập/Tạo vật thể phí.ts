@@ -33,11 +33,18 @@ function tínhLịchSửVàKếHoạchĐóngPhí(
     lịchSửĐóngPhí.push(...lịchSửĐóngPhíCũ, ...cáckỳPhíĐãĐóngCủaThiếtLậpCũ);
 
     const chuKỳCũ = lấyChuKỳ(vậtThểPhíTrướcĐó);
-    const kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới = lịchSửĐóngPhí.at(-1)!;
-    const ngàyĐóngGầnNhất = Temporal.PlainDate.from(kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới.ngàyĐóng);
+    const kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới = lịchSửĐóngPhí.at(-1);
 
-    ngàyĐóng = ngàyĐóngGầnNhất.add(chuKỳCũ);
-    tổngSốPhíHoànThành = kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới.tổngSốPhíHoànThành + sốTiềnMỗiKỳ;
+    /** Nếu trước ngày thiết lập mới không có kỳ phí nào thì nghĩa là đây cũng là thiết lập đầu tiên */
+    if (kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới) {
+      const ngàyĐóngGầnNhất = Temporal.PlainDate.from(kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới.ngàyĐóng);
+      ngàyĐóng = ngàyĐóngGầnNhất.add(chuKỳCũ);
+      tổngSốPhíHoànThành = kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới.tổngSốPhíHoànThành + sốTiềnMỗiKỳ;
+    } else {
+      //todo: kiểm tra coi lại đúng ko
+      ngàyĐóng = Temporal.PlainDate.from(ngàyThiếtLập);
+      tổngSốPhíHoànThành = sốTiềnMỗiKỳ;
+    }
   }
 
   while (true) {
