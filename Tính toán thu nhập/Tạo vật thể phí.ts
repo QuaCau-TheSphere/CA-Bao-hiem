@@ -35,7 +35,7 @@ function tínhLịchSửVàKếHoạchĐóngPhí(
     const chuKỳCũ = lấyChuKỳ(vậtThểPhíTrướcĐó);
     const kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới = lịchSửĐóngPhí.at(-1);
 
-    /** Nếu trước ngày thiết lập mới không có kỳ phí nào thì nghĩa là đây cũng là thiết lập đầu tiên */
+    /** Nếu trước ngày thiết lập mới không có kỳ phí đã đóng nào thì nghĩa là đây cũng là thiết lập đầu tiên */
     if (kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới) {
       const ngàyĐóngGầnNhất = Temporal.PlainDate.from(kỳPhíĐãĐóngTrướcNgàyThiếtLậpPhíMới.ngàyĐóng);
       ngàyĐóng = ngàyĐóngGầnNhất.add(chuKỳCũ);

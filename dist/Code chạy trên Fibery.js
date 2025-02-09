@@ -1,4 +1,7 @@
+// Tạo lúc 12:55:54 ngày 9/2/2025
+
 // Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts
+var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
 var hômNay = (/* @__PURE__ */ new Date()).toISOString().split("T")[0].trim();
 var fibery = context.getService("fibery");
 var http = context.getService("http");
@@ -12,8 +15,8 @@ function tạoHợpĐồngThiếtLậpPhí({
   "Chu kỳ": { Name: chuKỳ },
   "Số tiền mỗi kỳ": sốTiềnMỗiKỳ
 }) {
-  const dsCácDòng = cácLầnThiếtLậpPhí.trim().split("\n");
-  const cácLầnThiếtLậpPhíTrướcĐây = dsCácDòng.map((dòng) => {
+  const dsCácDòng = cácLầnThiếtLậpPhí ? cácLầnThiếtLậpPhí.trim().split("\n") : void 0;
+  const cácLầnThiếtLậpPhíTrướcĐây = (dsCácDòng == null ? void 0 : dsCácDòng.map((dòng) => {
     const split1 = dòng.split(": ");
     const split2 = split1[1].split(", ");
     return {
@@ -21,7 +24,7 @@ function tạoHợpĐồngThiếtLậpPhí({
       chuKỳ: split2[0].trim().toLocaleLowerCase(),
       sốTiềnMỗiKỳ: Number(split2[1].trim())
     };
-  });
+  })) || [];
   const lầnThiếtLậpPhíLầnNày = {
     chuKỳ: chuKỳ.toLocaleLowerCase(),
     ngàyThiếtLập: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
@@ -43,7 +46,7 @@ async function cậpNhậtCácLầnThiếtLậpPhí({
   Type,
   Id
 }) {
-  const text = cácLầnThiếtLậpPhí.trim() + `
+  const text = (cácLầnThiếtLậpPhí == null ? void 0 : cácLầnThiếtLậpPhí.trim()) + `
 ${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
   await fibery.updateEntity(Type, Id, { "Các lần thiết lập phí": text });
 }
@@ -80,15 +83,14 @@ async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, { Name:
 }
 
 // Tính toán thu nhập/Client/fibery.ts
-var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
-for (const entityHợpĐồng of args.currentEntities) {
-  const hợpĐồngThiếtLậpPhí = tạoHợpĐồngThiếtLậpPhí(entityHợpĐồng);
-  const { hợpĐồngVậtThểPhí, cácKỳPhíBịBỏ } = await lấyKếtQuảTínhToán(hợpĐồngThiếtLậpPhí);
-  await cậpNhậtCácLầnThiếtLậpPhí(entityHợpĐồng);
-  await xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, entityHợpĐồng);
-  await ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityHợpĐồng);
+async function main(currentEntities) {
+  for (const entityHợpĐồng of currentEntities) {
+    const hợpĐồngThiếtLậpPhí = tạoHợpĐồngThiếtLậpPhí(entityHợpĐồng);
+    const { hợpĐồngVậtThểPhí, cácKỳPhíBịBỏ } = await lấyKếtQuảTínhToán(hợpĐồngThiếtLậpPhí);
+    await cậpNhậtCácLầnThiếtLậpPhí(entityHợpĐồng);
+    await xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, entityHợpĐồng);
+    await ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityHợpĐồng);
+  }
 }
-export {
-  databaseKỳPhí
-};
-// Tạo lúc 23:55:10 ngày 7/2/2025
+await main(args.currentEntities);
+// Tạo lúc 12:55:54 ngày 9/2/2025

@@ -1,11 +1,14 @@
-import { HợpĐồngThiếtLậpPhí } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu.ts";
 import { xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Xử lý vật thể phí.ts";
 import { tạoVậtThểPhí } from "./Tính toán thu nhập/Tạo vật thể phí.ts";
 import { ResBody } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu cho client và server.ts";
-import { lấyKếHoạchĐóngPhíMới } from "./Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts";
+
+function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }: HợpĐồngVậtThểPhí) {
+  const vậtThểPhíCuốiCùng = cácVậtThểPhí.at(-1)!;
+  return vậtThểPhíCuốiCùng.kếHoạchĐóngPhí;
+}
 
 /** Cái nào phải dùng Temporal để tính thì cho vào đây */
-
 Deno.serve(async (req) => {
   const body = await req.text();
   if (body) {

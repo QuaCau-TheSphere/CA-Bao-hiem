@@ -44,7 +44,7 @@ export interface ContextFibery {
 
 export interface FiberyService {
   getEntityById: (type: string, id: string, fields: string[]) => any;
-  getEntitiesByIds: (type: string, ids: string[], fields: string[]) => { Id: string; [key: string]: string }[];
+  getEntitiesByIds: (type: string, ids: string[], fields: string[]) => Promise<{ Id: string; [key: string]: string }[]>;
   createEntity: (type: string, values: object) => any;
   createEntityBatch: (type: string, entities: object[]) => any;
   updateEntity: (type: string, id: string, values: object) => any;
