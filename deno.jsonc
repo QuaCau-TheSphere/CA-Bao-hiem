@@ -25,6 +25,7 @@
   "deploy": {
     "project": "Bảo hiểm",
     "entrypoint": "./server.ts",
+    // "entrypoint": "./Tính toán thu nhập/Server/server.ts",
     "org": "Quả Cầu"
   }
 }

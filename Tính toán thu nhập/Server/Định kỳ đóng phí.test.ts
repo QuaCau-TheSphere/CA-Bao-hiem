@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí } from "./Hàm hỗ trợ/Kiểu.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí } from "../Hàm hỗ trợ/Kiểu.ts";
 import { tạoVậtThểPhí } from "./Tạo vật thể phí.ts";
 import { lấyKếHoạchĐóngPhíMới } from "./Xử lý vật thể phí.ts";
 const dsHợpĐồng: HợpĐồngThiếtLậpPhí[] = [

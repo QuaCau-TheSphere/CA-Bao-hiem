@@ -1,4 +1,4 @@
-// Tạo lúc 12:55:54 ngày 9/2/2025
+// Tạo lúc 17:10:09 ngày 9/2/2025
 
 // Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts
 var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
@@ -46,6 +46,8 @@ async function cậpNhậtCácLầnThiếtLậpPhí({
   Type,
   Id
 }) {
+  if (!chuKỳ)
+    return;
   const text = (cácLầnThiếtLậpPhí == null ? void 0 : cácLầnThiếtLậpPhí.trim()) + `
 ${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
   await fibery.updateEntity(Type, Id, { "Các lần thiết lập phí": text });
@@ -85,6 +87,9 @@ async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, { Name:
 // Tính toán thu nhập/Client/fibery.ts
 async function main(currentEntities) {
   for (const entityHợpĐồng of currentEntities) {
+    const khôngCóChuKỳ = entityHợpĐồng["Chu kỳ"].Name === null;
+    if (khôngCóChuKỳ)
+      return;
     const hợpĐồngThiếtLậpPhí = tạoHợpĐồngThiếtLậpPhí(entityHợpĐồng);
     const { hợpĐồngVậtThểPhí, cácKỳPhíBịBỏ } = await lấyKếtQuảTínhToán(hợpĐồngThiếtLậpPhí);
     await cậpNhậtCácLầnThiếtLậpPhí(entityHợpĐồng);
@@ -93,4 +98,4 @@ async function main(currentEntities) {
   }
 }
 await main(args.currentEntities);
-// Tạo lúc 12:55:54 ngày 9/2/2025
+// Tạo lúc 17:10:09 ngày 9/2/2025

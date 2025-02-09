@@ -1,12 +1,7 @@
 import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu.ts";
-import { xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Xử lý vật thể phí.ts";
-import { tạoVậtThểPhí } from "./Tính toán thu nhập/Tạo vật thể phí.ts";
+import { xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Server/Xử lý vật thể phí.ts";
+import { tạoVậtThểPhí } from "./Tính toán thu nhập/Server/Tạo vật thể phí.ts";
 import { ResBody } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu cho client và server.ts";
-
-function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }: HợpĐồngVậtThểPhí) {
-  const vậtThểPhíCuốiCùng = cácVậtThểPhí.at(-1)!;
-  return vậtThểPhíCuốiCùng.kếHoạchĐóngPhí;
-}
 
 /** Cái nào phải dùng Temporal để tính thì cho vào đây */
 Deno.serve(async (req) => {
@@ -15,10 +10,7 @@ Deno.serve(async (req) => {
     try {
       const hợpĐồngThiếtLậpPhí = JSON.parse(body) as HợpĐồngThiếtLậpPhí;
       const hợpĐồngVậtThểPhí = tạoVậtThểPhí(hợpĐồngThiếtLậpPhí);
-      console.log(hợpĐồngVậtThểPhí);
-
-      const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
-      const cácKỳPhíBịBỏ = xácĐịnhCácKỳPhíBịBỏ(kếHoạchĐóngPhí);
+      const cácKỳPhíBịBỏ = xácĐịnhCácKỳPhíBịBỏ(hợpĐồngVậtThểPhí);
 
       const resBody: ResBody = {
         hợpĐồngVậtThểPhí: hợpĐồngVậtThểPhí,
