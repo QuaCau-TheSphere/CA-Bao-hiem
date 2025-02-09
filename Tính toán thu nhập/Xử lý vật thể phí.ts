@@ -13,5 +13,5 @@ export function tínhToànBộCácKỳĐóngPhí({ cácVậtThểPhí }: HợpĐ
 const hômNay = Temporal.Now.plainDateISO();
 
 export function xácĐịnhCácKỳPhíBịBỏ(kếHoạchĐóngPhí: KỳPhí[]) {
-  return kếHoạchĐóngPhí.filter(({ ngàyĐóng }) => soSánhNgày(ngàyĐóng, hômNay) > 0);
+  return kếHoạchĐóngPhí.filter(({ ngàyĐóng }) => soSánhNgày(ngàyĐóng, hômNay) >= 0);
 }
