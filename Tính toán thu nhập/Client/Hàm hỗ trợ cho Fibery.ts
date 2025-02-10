@@ -43,7 +43,6 @@ interface EntityKỳPhíĐểTạo extends EntityFiberyToCreate {
   "Ngày đóng kế tiếp": string;
   "Phí đóng": SốTiền;
   "Tổng số phí hoàn thành": SốTiền;
-  People: Id;
 }
 function lấyKếHoạchĐóngPhíMới({ cácVậtThểPhí }: HợpĐồngVậtThểPhí) {
   const vậtThểPhíCuốiCùng = cácVậtThểPhí.slice(-1)[0];
@@ -117,9 +116,10 @@ export async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ: KỳPhí[],
 }
 export async function ghiKếHoạchĐóngPhíMới(
   hợpĐồngVậtThểPhí: HợpĐồngVậtThểPhí,
-  { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, People: { Id: idChủHợpĐồng }, "Chu kỳ": { Name: chuKỳ } }: EntityHợpĐồng,
+  entityHợpĐồng: EntityHợpĐồng,
 ) {
   const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
+  const { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, "Chu kỳ": { Name: chuKỳ } } = entityHợpĐồng;
   const cácEntityKỳPhíĐểTạo: EntityKỳPhíĐểTạo[] = kếHoạchĐóngPhí.map(({ ngàyĐóng, ngàyĐóngKếTiếp, phíĐóng, tổngSốPhíHoànThành }) => {
     return {
       Name: `${tênHợpĐồng}, ${chuKỳ}`,
@@ -127,7 +127,6 @@ export async function ghiKếHoạchĐóngPhíMới(
       "Ngày đóng": String(ngàyĐóng),
       "Phí đóng": phíĐóng,
       "Tổng số phí hoàn thành": tổngSốPhíHoànThành,
-      People: idChủHợpĐồng,
     };
   });
 
@@ -136,4 +135,14 @@ export async function ghiKếHoạchĐóngPhíMới(
     return { id: idEntityHợpĐồng, itemId: i.Id };
   });
   await fibery.addCollectionItemBatch(databaseHợpĐồng, "Kỳ phí", dsEntityKỳPhíDùngĐểThêm);
+
+  const cácEntityPeopleTrongEntityHợpĐồng: EntityFibery[] = (await fibery.getEntityById(databaseHợpĐồng, idEntityHợpĐồng, [
+    "People (NDBT)",
+  ]))["People (NDBT)"];
+  for (const { Id: idEntityKỳPhí } of cácEntityKỳPhíĐượcTạo) {
+    const dsEntityPeopleDùngĐểThêm = cácEntityPeopleTrongEntityHợpĐồng.map((i) => {
+      return { id: idEntityKỳPhí, itemId: i.Id };
+    });
+    await fibery.addCollectionItemBatch(databaseKỳPhí, "People", dsEntityPeopleDùngĐểThêm);
+  }
 }

@@ -1,4 +1,4 @@
-// Tạo lúc 17:10:09 ngày 9/2/2025
+// Tạo lúc 14:25:18 ngày 10/2/2025
 
 // Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts
 var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
@@ -65,16 +65,16 @@ async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, { Type: databaseH�
   console.log("🚀 ~ idCácKỳPhíBịBỏ:", idCácKỳPhíBịBỏ);
   await fibery.deleteEntityBatch(databaseKỳPhí, idCácKỳPhíBịBỏ);
 }
-async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, People: { Id: idChủHợpĐồng }, "Chu kỳ": { Name: chuKỳ } }) {
+async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityHợpĐồng) {
   const kếHoạchĐóngPhí = lấyKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí);
+  const { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, "Chu kỳ": { Name: chuKỳ } } = entityHợpĐồng;
   const cácEntityKỳPhíĐểTạo = kếHoạchĐóngPhí.map(({ ngàyĐóng, ngàyĐóngKếTiếp, phíĐóng, tổngSốPhíHoànThành }) => {
     return {
       Name: `${tênHợpĐồng}, ${chuKỳ}`,
       "Ngày đóng kế tiếp": ngàyĐóngKếTiếp ? ngàyĐóngKếTiếp.toString() : "2099-12-31",
       "Ngày đóng": String(ngàyĐóng),
       "Phí đóng": phíĐóng,
-      "Tổng số phí hoàn thành": tổngSốPhíHoànThành,
-      People: idChủHợpĐồng
+      "Tổng số phí hoàn thành": tổngSốPhíHoànThành
     };
   });
   const cácEntityKỳPhíĐượcTạo = await fibery.createEntityBatch(databaseKỳPhí, cácEntityKỳPhíĐểTạo);
@@ -82,6 +82,15 @@ async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, { Name:
     return { id: idEntityHợpĐồng, itemId: i.Id };
   });
   await fibery.addCollectionItemBatch(databaseHợpĐồng, "Kỳ phí", dsEntityKỳPhíDùngĐểThêm);
+  const cácEntityPeopleTrongEntityHợpĐồng = (await fibery.getEntityById(databaseHợpĐồng, idEntityHợpĐồng, [
+    "People (NDBT)"
+  ]))["People (NDBT)"];
+  for (const { Id: idEntityKỳPhí } of cácEntityKỳPhíĐượcTạo) {
+    const dsEntityPeopleDùngĐểThêm = cácEntityPeopleTrongEntityHợpĐồng.map((i) => {
+      return { id: idEntityKỳPhí, itemId: i.Id };
+    });
+    await fibery.addCollectionItemBatch(databaseKỳPhí, "People", dsEntityPeopleDùngĐểThêm);
+  }
 }
 
 // Tính toán thu nhập/Client/fibery.ts
@@ -98,4 +107,4 @@ async function main(currentEntities) {
   }
 }
 await main(args.currentEntities);
-// Tạo lúc 17:10:09 ngày 9/2/2025
+// Tạo lúc 14:25:18 ngày 10/2/2025
