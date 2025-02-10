@@ -1,4 +1,4 @@
-// Tạo lúc 14:25:18 ngày 10/2/2025
+// Tạo lúc 15:00:32 ngày 10/2/2025
 
 // Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts
 var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
@@ -48,9 +48,14 @@ async function cậpNhậtCácLầnThiếtLậpPhí({
 }) {
   if (!chuKỳ)
     return;
-  const text = (cácLầnThiếtLậpPhí == null ? void 0 : cácLầnThiếtLậpPhí.trim()) + `
+  let textLog;
+  if (!cácLầnThiếtLậpPhí) {
+    textLog = `${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
+  } else {
+    textLog = cácLầnThiếtLậpPhí.trim() + `
 ${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
-  await fibery.updateEntity(Type, Id, { "Các lần thiết lập phí": text });
+  }
+  await fibery.updateEntity(Type, Id, { "Các lần thiết lập phí": textLog });
 }
 async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ, { Type: databaseHợpĐồng, Id: idHợpĐồng }) {
   const cácVậtThểTrườngKỳPhíĐangCó = (await fibery.getEntityById(databaseHợpĐồng, idHợpĐồng, ["Kỳ phí"]))["Kỳ phí"];
@@ -70,7 +75,6 @@ async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityH
   const { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, "Chu kỳ": { Name: chuKỳ } } = entityHợpĐồng;
   const cácEntityKỳPhíĐểTạo = kếHoạchĐóngPhí.map(({ ngàyĐóng, ngàyĐóngKếTiếp, phíĐóng, tổngSốPhíHoànThành }) => {
     return {
-      Name: `${tênHợpĐồng}, ${chuKỳ}`,
       "Ngày đóng kế tiếp": ngàyĐóngKếTiếp ? ngàyĐóngKếTiếp.toString() : "2099-12-31",
       "Ngày đóng": String(ngàyĐóng),
       "Phí đóng": phíĐóng,
@@ -83,8 +87,8 @@ async function ghiKếHoạchĐóngPhíMới(hợpĐồngVậtThểPhí, entityH
   });
   await fibery.addCollectionItemBatch(databaseHợpĐồng, "Kỳ phí", dsEntityKỳPhíDùngĐểThêm);
   const cácEntityPeopleTrongEntityHợpĐồng = (await fibery.getEntityById(databaseHợpĐồng, idEntityHợpĐồng, [
-    "People (NDBT)"
-  ]))["People (NDBT)"];
+    "People (NDBH)"
+  ]))["People (NDBH)"];
   for (const { Id: idEntityKỳPhí } of cácEntityKỳPhíĐượcTạo) {
     const dsEntityPeopleDùngĐểThêm = cácEntityPeopleTrongEntityHợpĐồng.map((i) => {
       return { id: idEntityKỳPhí, itemId: i.Id };
@@ -107,4 +111,4 @@ async function main(currentEntities) {
   }
 }
 await main(args.currentEntities);
-// Tạo lúc 14:25:18 ngày 10/2/2025
+// Tạo lúc 15:00:32 ngày 10/2/2025

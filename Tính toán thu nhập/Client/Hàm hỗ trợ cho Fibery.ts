@@ -86,10 +86,17 @@ export async function cậpNhậtCácLầnThiếtLậpPhí({
   Id,
 }: EntityHợpĐồng) {
   if (!chuKỳ) return;
-  const text = cácLầnThiếtLậpPhí?.trim() + `\n${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
-  await fibery.updateEntity(Type as string, Id as string, { "Các lần thiết lập phí": text });
+
+  let textLog: string;
+  if (!cácLầnThiếtLậpPhí) {
+    textLog = `${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
+  } else {
+    textLog = cácLầnThiếtLậpPhí.trim() + `\n${hômNay}: ${chuKỳ.toLocaleLowerCase()}, ${sốTiềnMỗiKỳ}`;
+  }
+  await fibery.updateEntity(Type as string, Id as string, { "Các lần thiết lập phí": textLog });
 }
 /** Xoá các kỳ phí sau ngày thiết lập phí mới */
+
 export async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ: KỳPhí[], { Type: databaseHợpĐồng, Id: idHợpĐồng }: EntityHợpĐồng) {
   const cácVậtThểTrườngKỳPhíĐangCó = (await fibery.getEntityById(databaseHợpĐồng, idHợpĐồng, ["Kỳ phí"]))["Kỳ phí"] as TrườngFibery<string>[];
   if (cácVậtThểTrườngKỳPhíĐangCó.length === 0) return;
@@ -107,13 +114,8 @@ export async function xoáCácKỳPhíBịBỏ(cácKỳPhíBịBỏ: KỳPhí[],
   const idCácKỳPhíBịBỏ = idVàNgàyĐóngCácKỳPhíĐangCó.flatMap(({ Id, "Ngày đóng": ngàyĐóng }) => cácNgàyĐóngPhíBịBỏ.includes(ngàyĐóng) ? [Id] : []);
   console.log("🚀 ~ idCácKỳPhíBịBỏ:", idCácKỳPhíBịBỏ);
   await fibery.deleteEntityBatch(databaseKỳPhí, idCácKỳPhíBịBỏ);
-
-  // const query = "{findKyPhis {id, name}}";
-  // const graphql = await fibery.graphql(encodeURIComponent("Định kỳ đóng phí"), query);
-  // const newLocal = graphql["data"]["findKyPhis"];
-  // const idsFromB = newLocal.map((entity) => entity.id);
-  // console.log("🚀 ~ idsFromB:", idsFromB);
 }
+
 export async function ghiKếHoạchĐóngPhíMới(
   hợpĐồngVậtThểPhí: HợpĐồngVậtThểPhí,
   entityHợpĐồng: EntityHợpĐồng,
@@ -122,7 +124,6 @@ export async function ghiKếHoạchĐóngPhíMới(
   const { Name: tênHợpĐồng, Type: databaseHợpĐồng, Id: idEntityHợpĐồng, "Chu kỳ": { Name: chuKỳ } } = entityHợpĐồng;
   const cácEntityKỳPhíĐểTạo: EntityKỳPhíĐểTạo[] = kếHoạchĐóngPhí.map(({ ngàyĐóng, ngàyĐóngKếTiếp, phíĐóng, tổngSốPhíHoànThành }) => {
     return {
-      Name: `${tênHợpĐồng}, ${chuKỳ}`,
       "Ngày đóng kế tiếp": ngàyĐóngKếTiếp ? ngàyĐóngKếTiếp.toString() : "2099-12-31",
       "Ngày đóng": String(ngàyĐóng),
       "Phí đóng": phíĐóng,
@@ -137,8 +138,8 @@ export async function ghiKếHoạchĐóngPhíMới(
   await fibery.addCollectionItemBatch(databaseHợpĐồng, "Kỳ phí", dsEntityKỳPhíDùngĐểThêm);
 
   const cácEntityPeopleTrongEntityHợpĐồng: EntityFibery[] = (await fibery.getEntityById(databaseHợpĐồng, idEntityHợpĐồng, [
-    "People (NDBT)",
-  ]))["People (NDBT)"];
+    "People (NDBH)",
+  ]))["People (NDBH)"];
   for (const { Id: idEntityKỳPhí } of cácEntityKỳPhíĐượcTạo) {
     const dsEntityPeopleDùngĐểThêm = cácEntityPeopleTrongEntityHợpĐồng.map((i) => {
       return { id: idEntityKỳPhí, itemId: i.Id };
