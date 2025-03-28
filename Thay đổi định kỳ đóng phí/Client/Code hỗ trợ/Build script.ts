@@ -4,7 +4,7 @@ import * as log from "@std/log";
 
 const entryPoints = ["./Tính toán thu nhập/Client/fibery.ts"];
 // const entryPoints = ["./Tính toán thu nhập/Client/test xoá dữ liệu fibery.ts"];
-const outfile = `./dist/Code chạy trên Fibery.js`;
+const outfile = `./Thay đổi định kỳ đóng phí/Client/Code hỗ trợ/Code chạy trên Fibery.js`;
 const pushDirectory =
   "D:/Programming/Theo phần mềm/fibery-script-management/quacau.fibery.io/fibery/space/Định kỳ đóng phí/database/Hợp đồng/automations/rule/Rule ~c793.js";
 const thờiĐiểmTạo = `// Tạo lúc ${Temporal.Now.plainTimeISO().toLocaleString("vi")} ngày ${Temporal.Now.plainDateISO().toLocaleString("vi")}`;

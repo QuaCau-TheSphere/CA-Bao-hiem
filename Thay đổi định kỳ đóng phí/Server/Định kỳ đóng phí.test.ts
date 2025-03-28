@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
-import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí } from "../Hàm hỗ trợ/Kiểu.ts";
-import { tạoVậtThểPhí } from "./Tạo vật thể phí.ts";
-import { lấyKếHoạchĐóngPhíMới } from "./Xử lý vật thể phí.ts";
+import { HợpĐồngThiếtLậpPhí, KỳPhí } from "../../Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
+import { HợpĐồngVậtThểPhí } from "./Vật thể phí.ts";
+// import { lấyKếHoạchĐóngPhíMới } from "./Xử lý vật thể phí.ts";
 const dsHợpĐồng: HợpĐồngThiếtLậpPhí[] = [
   {
     tổngPhí: 3e6,
@@ -49,7 +49,7 @@ for (const i in dsHợpĐồng) {
   if (i === "0") continue;
   const hợpĐồngThiếtLậpPhí = dsHợpĐồng[i];
   Deno.test(`Hợp đồng ${i}`, () => {
-    const hợpĐồngVậtThểPhí = tạoVậtThểPhí(hợpĐồngThiếtLậpPhí);
+    const hợpĐồngVậtThểPhí = new HợpĐồngVậtThểPhí(hợpĐồngThiếtLậpPhí);
     kiểmTraKếtQuả(hợpĐồngVậtThểPhí);
     // console.log("🚀 ~ hợpĐồng:", hợpĐồng);
     // console.log(lấyKếHoạchĐóngPhíMới(hợpĐồng));

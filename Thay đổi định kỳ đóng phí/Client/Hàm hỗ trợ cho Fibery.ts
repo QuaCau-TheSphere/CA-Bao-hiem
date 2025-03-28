@@ -1,9 +1,9 @@
 // deno-lint-ignore-file no-unused-vars
 // deno-lint-ignore-file no-explicit-any
 
-import { ChuKỳ } from "../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
-import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí, SốTiền, ThiếtLậpPhí } from "../Hàm hỗ trợ/Kiểu.ts";
-import { ResBody } from "../Hàm hỗ trợ/Kiểu cho client và server.ts";
+import { ChuKỳ } from "../../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí, SốTiền, ThiếtLậpPhí } from "../../Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
+import { ResBody } from "../../Hàm hỗ trợ/Kiểu cho client và server.ts";
 import {
   ArgsFibery,
   ContextFibery,
@@ -13,9 +13,9 @@ import {
   HttpService,
   Id,
   TrườngFibery,
-} from "../Hàm hỗ trợ/Kiểu cho Fibery.ts";
+} from "../../Hàm hỗ trợ/Kiểu cho Fibery.ts";
 
-const databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
+const databaseKỳPhí = "Cathay Life/Kỳ phí";
 
 export const hômNay = new Date().toISOString().split("T")[0].trim();
 export declare const context: ContextFibery;

@@ -1,4 +1,4 @@
-import { ArgsFibery } from "../Hàm hỗ trợ/Kiểu cho Fibery.ts";
+import { ArgsFibery } from "../../Hàm hỗ trợ/Kiểu cho Fibery.ts";
 import {
   cậpNhậtCácLầnThiếtLậpPhí,
   EntityHợpĐồng,

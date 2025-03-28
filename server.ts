@@ -1,7 +1,6 @@
-import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu.ts";
-import { xácĐịnhCácKỳPhíBịBỏ } from "./Tính toán thu nhập/Server/Xử lý vật thể phí.ts";
-import { tạoVậtThểPhí } from "./Tính toán thu nhập/Server/Tạo vật thể phí.ts";
-import { ResBody } from "./Tính toán thu nhập/Hàm hỗ trợ/Kiểu cho client và server.ts";
+import { HợpĐồngThiếtLậpPhí } from "./Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
+import { ResBody } from "./Hàm hỗ trợ/Kiểu cho client và server.ts";
+import { HợpĐồngVậtThểPhí } from "./Thay đổi định kỳ đóng phí/Server/Vật thể phí.ts";
 
 /** Cái nào phải dùng Temporal để tính thì cho vào đây */
 Deno.serve(async (req) => {
@@ -9,8 +8,8 @@ Deno.serve(async (req) => {
   if (body) {
     try {
       const hợpĐồngThiếtLậpPhí = JSON.parse(body) as HợpĐồngThiếtLậpPhí;
-      const hợpĐồngVậtThểPhí = tạoVậtThểPhí(hợpĐồngThiếtLậpPhí);
-      const cácKỳPhíBịBỏ = xácĐịnhCácKỳPhíBịBỏ(hợpĐồngVậtThểPhí);
+      const hợpĐồngVậtThểPhí = new HợpĐồngVậtThểPhí(hợpĐồngThiếtLậpPhí);
+      const cácKỳPhíBịBỏ = hợpĐồngVậtThểPhí.cácKỳPhíBịBỏ();
 
       const resBody: ResBody = {
         hợpĐồngVậtThểPhí: hợpĐồngVậtThểPhí,

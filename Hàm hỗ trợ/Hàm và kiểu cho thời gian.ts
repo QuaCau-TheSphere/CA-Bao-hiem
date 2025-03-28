@@ -1,4 +1,4 @@
-import { ThiếtLậpPhí } from "./Kiểu.ts";
+import { ThiếtLậpPhí } from "./Kiểu cho hợp đồng và phí.ts";
 
 /**
  * Đúng ra chỉ cần dùng Temporal là được. Vấn đề là Fibery dùng Node 12. Node 12 thì không có Temporal, nên phải bundle với polyfill của nó. Nhưng nếu làm vậy thì script lại quá lớn, Fibery không chịu. Nên mới chấp nhận dùng dạng ISO.
@@ -6,6 +6,7 @@ import { ThiếtLậpPhí } from "./Kiểu.ts";
 export type NgàyĐóng = Temporal.PlainDate | string;
 export type NgàyThiếtLập = Temporal.PlainDate | string;
 export type ChuKỳ = "tháng" | "quý" | "nửa năm" | "năm";
+export type Quý = 1 | 2 | 3 | 4;
 
 const seedDanhMụcChuKỳ = [
   ["tháng", Temporal.Duration.from({ months: 1 })],
@@ -29,3 +30,5 @@ export function lấyChuKỳ({ chuKỳ }: ThiếtLậpPhí) {
 export function soSánhNgày(ngày1: NgàyĐóng, ngày2: NgàyThiếtLập) {
   return Temporal.PlainDate.compare(ngày1, ngày2);
 }
+
+export const hômNay = Temporal.Now.plainDateISO();

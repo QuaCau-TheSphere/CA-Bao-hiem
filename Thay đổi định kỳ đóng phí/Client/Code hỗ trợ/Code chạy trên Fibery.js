@@ -1,7 +1,7 @@
-// Tạo lúc 15:00:32 ngày 10/2/2025
+// Tạo lúc 15:07:16 ngày 10/2/2025
 
 // Tính toán thu nhập/Client/Hàm hỗ trợ cho Fibery.ts
-var databaseKỳPhí = "Định kỳ đóng phí/Kỳ phí";
+var databaseKỳPhí = "Cathay Life/Kỳ phí";
 var hômNay = (/* @__PURE__ */ new Date()).toISOString().split("T")[0].trim();
 var fibery = context.getService("fibery");
 var http = context.getService("http");
@@ -111,4 +111,4 @@ async function main(currentEntities) {
   }
 }
 await main(args.currentEntities);
-// Tạo lúc 15:00:32 ngày 10/2/2025
+// Tạo lúc 15:07:16 ngày 10/2/2025
