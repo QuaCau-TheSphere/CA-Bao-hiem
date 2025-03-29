@@ -1,7 +1,8 @@
 import { assertEquals } from "@std/assert";
-import { HợpĐồngThiếtLậpPhí, KỳPhí } from "../../Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
-import { HợpĐồngVậtThểPhí } from "./Vật thể phí.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí } from "../Hợp đồng.ts";
+import { KỳPhí } from "../Vật thể phí.ts";
 // import { lấyKếHoạchĐóngPhíMới } from "./Xử lý vật thể phí.ts";
+
 const dsHợpĐồng: HợpĐồngThiếtLậpPhí[] = [
   {
     tổngPhí: 3e6,

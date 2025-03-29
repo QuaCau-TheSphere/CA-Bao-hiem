@@ -1,5 +1,5 @@
-import { ArgsFibery, ContextFibery, FiberyService, TrườngFibery } from "../../../Hàm hỗ trợ/Kiểu cho Fibery.ts";
-import { EntityHợpĐồng } from "../Hàm hỗ trợ cho Fibery.ts";
+import { ArgsFibery, ContextFibery, FiberyService, TrườngFibery } from "./Kiểu cho Fibery.ts";
+import { EntityHợpĐồng } from "./Hàm hỗ trợ cho Fibery.ts";
 
 declare const args: ArgsFibery;
 declare const context: ContextFibery;

@@ -1,12 +1,48 @@
-import { HợpĐồngThiếtLậpPhí, KỳPhí, SốTiền } from "../../Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
-import { ChuKỳ, lấyChuKỳ, NgàyThiếtLập, soSánhNgày } from "../../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
-import { ThiếtLậpPhí } from "../../Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
+import { ChuKỳ, lấyChuKỳ, NgàyThiếtLập, NgàyĐóng, soSánhNgày } from "../Code hỗ trợ/Hàm và kiểu cho thời gian.ts";
+import { SốTiền } from "../Code hỗ trợ/Số tiền.ts";
 
 /**
  * Tính các kỳ phí bắt đầu từ ngày mà thiết lập có hiệu lực cho tới ngày có ngày thiết lập mới
  */
 function tínhCáckỳPhíĐãĐóngCủaThiếtLậpCũ({ kếHoạchĐóngPhí }: VậtThểPhí, ngàyThiếtLập: NgàyThiếtLập) {
   return kếHoạchĐóngPhí.filter(({ ngàyĐóng }) => soSánhNgày(ngàyĐóng, ngàyThiếtLập) < 0);
+}
+export class KỳPhí {
+  ngàyĐóng: NgàyĐóng;
+  phíĐóng: SốTiền;
+  tổngSốPhíHoànThành: SốTiền;
+  ngàyĐóngKếTiếp: NgàyĐóng | null;
+
+  constructor(ngàyĐóng: NgàyĐóng, phíĐóng: SốTiền, tổngSốPhíHoànThành: SốTiền, ngàyĐóngKếTiếp: NgàyĐóng | null) {
+    this.ngàyĐóng = ngàyĐóng;
+    this.phíĐóng = phíĐóng;
+    this.tổngSốPhíHoànThành = tổngSốPhíHoànThành;
+    this.ngàyĐóngKếTiếp = ngàyĐóngKếTiếp;
+  }
+}
+
+/**
+ * Mỗi lần thiết lập phí thì sẽ tạo ra một vật thể thiết lập phí. Thiết lập phí là những thứ người dùng thiết lập. Vật thể phí là kết quả tính toán từ các thiết lập đó
+ * Tất cả những thứ trong đây nên chấp nhận string hoặc number, vì nó sẽ được truyền vào request
+ */
+export class ThiếtLậpPhí {
+  ngàyThiếtLập: NgàyThiếtLập;
+  chuKỳ: ChuKỳ;
+  sốTiềnMỗiKỳ: SốTiền;
+
+  constructor(ngàyThiếtLập: NgàyThiếtLập, chuKỳ: ChuKỳ, sốTiềnMỗiKỳ: SốTiền) {
+    this.ngàyThiếtLập = ngàyThiếtLập;
+    this.chuKỳ = chuKỳ;
+    this.sốTiềnMỗiKỳ = sốTiềnMỗiKỳ;
+  }
+}
+
+export interface VậtThểPhí {
+  ngàyThiếtLập: NgàyThiếtLập;
+  chuKỳ: ChuKỳ;
+  sốTiềnMỗiKỳ: SốTiền;
+  lịchSửĐóngPhí: KỳPhí[];
+  kếHoạchĐóngPhí: KỳPhí[];
 }
 
 /**
@@ -94,54 +130,5 @@ export class VậtThểPhí implements VậtThểPhí {
     this.sốTiềnMỗiKỳ = thiếtLậpPhí.sốTiềnMỗiKỳ;
     this.lịchSửĐóngPhí = lịchSửĐóngPhí;
     this.kếHoạchĐóngPhí = kếHoạchĐóngPhí;
-  }
-}
-
-/**
- * Với mỗi thiết lập phí được khai báo sẽ tính kế hoạch đóng phí.
- *
- * Ngày đóng phí đầu tiên của thiết lập phí kỳ này là ngày sử dụng hết số tiền đã đóng của kỳ phí trước đó. Nó là kỳ phí cuối cùng của thiết lập cũ
- */
-
-export class HợpĐồngVậtThểPhí implements HợpĐồngVậtThểPhí {
-  tênHợpĐồng?: string;
-  tổngPhí: SốTiền;
-  cácVậtThểPhí: VậtThểPhí[];
-
-  constructor({ tổngPhí, cácLầnThiếtLậpPhí, tênHợpĐồng }: HợpĐồngThiếtLậpPhí) {
-    const cácVậtThểPhí: VậtThểPhí[] = [];
-    for (const i of Object.keys(cácLầnThiếtLậpPhí).map(Number)) {
-      const thiếtLậpPhí = cácLầnThiếtLậpPhí[i];
-      const vậtThểPhíTrướcĐó = cácVậtThểPhí[i - 1] || null;
-      const vậtThểPhí = new VậtThểPhí(tổngPhí, thiếtLậpPhí, vậtThểPhíTrướcĐó);
-
-      cácVậtThểPhí.push(vậtThểPhí);
-      const { lịchSửĐóngPhí } = vậtThểPhí;
-      // console.log(i, ngàyThiếtLập, lịchSửĐóngPhí);
-    }
-
-    this.tênHợpĐồng = tênHợpĐồng;
-    this.tổngPhí = tổngPhí;
-    this.cácVậtThểPhí = cácVậtThểPhí;
-  }
-
-  /**
-   * Cả quá khứ lẫn tương lai dự kiến
-   */
-  tínhToànBộCácKỳĐóngPhí() {
-    const thiếtLậpPhíCuốiCùng = this.cácVậtThểPhí.slice(-1)[0];
-    const { lịchSửĐóngPhí, kếHoạchĐóngPhí } = thiếtLậpPhíCuốiCùng;
-    return lịchSửĐóngPhí?.concat(kếHoạchĐóngPhí);
-  }
-
-  cácKỳPhíBịBỏ(): KỳPhí[] {
-    const vậtThểPhíTrướcKhiThayĐổi = this.cácVậtThểPhí.at(-2);
-    console.log("🚀 ~ vậtThểPhíTrướcKhiThayĐổi:", vậtThểPhíTrướcKhiThayĐổi);
-    if (!vậtThểPhíTrướcKhiThayĐổi) return [];
-
-    const kếHoạchĐóngPhíCũ = vậtThểPhíTrướcKhiThayĐổi.kếHoạchĐóngPhí;
-    console.log("🚀 ~ kếHoạchĐóngPhíCũ:", kếHoạchĐóngPhíCũ);
-    const hômNay = Temporal.Now.plainDateISO();
-    return kếHoạchĐóngPhíCũ.filter(({ ngàyĐóng }) => soSánhNgày(ngàyĐóng, hômNay) >= 0);
   }
 }

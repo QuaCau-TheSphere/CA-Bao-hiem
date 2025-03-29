@@ -1,19 +1,12 @@
 // deno-lint-ignore-file no-unused-vars
 // deno-lint-ignore-file no-explicit-any
 
-import { ChuKỳ } from "../../Hàm hỗ trợ/Hàm và kiểu cho thời gian.ts";
-import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí, KỳPhí, SốTiền, ThiếtLậpPhí } from "../../Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
-import { ResBody } from "../../Hàm hỗ trợ/Kiểu cho client và server.ts";
-import {
-  ArgsFibery,
-  ContextFibery,
-  EntityFibery,
-  EntityFiberyToCreate,
-  FiberyService,
-  HttpService,
-  Id,
-  TrườngFibery,
-} from "../../Hàm hỗ trợ/Kiểu cho Fibery.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí } from "../../../Code chính/Hợp đồng.ts";
+import { KỳPhí, ThiếtLậpPhí } from "../../../Code chính/Vật thể phí.ts";
+import { ChuKỳ } from "../../Hàm và kiểu cho thời gian.ts";
+import { ResBody } from "../../Kiểu cho client và server.ts";
+import { ArgsFibery, ContextFibery, EntityFibery, EntityFiberyToCreate, FiberyService, HttpService, Id, TrườngFibery } from "./Kiểu cho Fibery.ts";
+import { SốTiền } from "../../Số tiền.ts";
 
 const databaseKỳPhí = "Cathay Life/Kỳ phí";
 

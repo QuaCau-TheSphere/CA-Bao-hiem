@@ -1,6 +1,5 @@
-import { HợpĐồngThiếtLậpPhí } from "./Hàm hỗ trợ/Kiểu cho hợp đồng và phí.ts";
-import { ResBody } from "./Hàm hỗ trợ/Kiểu cho client và server.ts";
-import { HợpĐồngVậtThểPhí } from "./Thay đổi định kỳ đóng phí/Server/Vật thể phí.ts";
+import { ResBody } from "./Code hỗ trợ/Kiểu cho client và server.ts";
+import { HợpĐồngThiếtLậpPhí, HợpĐồngVậtThểPhí } from "./Code chính/Hợp đồng.ts";
 
 /** Cái nào phải dùng Temporal để tính thì cho vào đây */
 Deno.serve(async (req) => {
